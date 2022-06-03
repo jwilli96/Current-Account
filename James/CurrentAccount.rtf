@@ -1,29 +1,29 @@
 
-public class HelloWorld \{\
-    int startBalance;\
-    \
-    public HelloWorld(int balance)\{\
-        startBalance = balance;\
-        System.out.println("Congrats you have " + balance + " in your account.");\
-    \}\
-    \
-    public void deposit(int higherBalance)\{\
-        higherBalance = startBalance + higherBalance;\
-        startBalance = higherBalance;\
-        \
-        System.out.println("Congrats you have " + higherBalance + " in your account.");\
-    \}\
-    \
-    public void withdraw(int lowerBalance)\{\
-               lowerBalance = startBalance - lowerBalance;\
-        \
-        System.out.println("Now you have " + lowerBalance + " in your account."); \
-        \
-    \}\
-    public static void main(String[] args) \{\
-        System.out.println("Hello, World!"); \
-        HelloWorld myAccount = new HelloWorld(50);\
-        myAccount.deposit(150);\
-        myAccount.withdraw(100);\
-    \}\
-\}}
+public class HelloWorld {
+    int startBalance;
+    
+    public HelloWorld(int balance){
+        startBalance = balance;
+        System.out.println("Congrats you have " + balance + " in your account.");
+    }
+    
+    public void deposit(int higherBalance){
+        higherBalance = startBalance + higherBalance;
+        startBalance = higherBalance;
+        
+        System.out.println("Congrats you have " + higherBalance + " in your account.");
+    }
+    
+    public void withdraw(int lowerBalance){
+               lowerBalance = startBalance - lowerBalance;
+        
+        System.out.println("Now you have " + lowerBalance + " in your account.");
+        
+    }
+    public static void main(String[] args) {
+        System.out.println("Hello, World!");
+        HelloWorld myAccount = new HelloWorld(50);
+        myAccount.deposit(150);
+        myAccount.withdraw(100);
+    }
+}
