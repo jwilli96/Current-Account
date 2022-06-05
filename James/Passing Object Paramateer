@@ -1,0 +1,22 @@
+class Car{
+    String name;
+    public Car(String name){
+        this.name = name;
+    }
+}
+
+class Garage{
+    void park(Car car){
+    
+    System.out.println("The " + car.name + " is parked in the garage");
+}
+}
+
+class Main {
+    public static void main(String[] args) {
+        
+        Car car = new Car("BMW");
+        Garage garage = new Garage();
+        garage.park(car);
+    }
+}
