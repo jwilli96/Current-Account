@@ -1,0 +1,24 @@
+class TextEditor {
+    String wordOne;
+    String reversed;
+
+    public void reverseString(String wordOne){
+    //System.out.println(word1.length());
+    
+    char[] myWordArray = new char[wordOne.length()];
+    
+    for (int i = 0; i < wordOne.length(); i++){
+        myWordArray[i] = wordOne.charAt(wordOne.length() - 1 - i);
+    }
+    
+    reversed = String.valueOf(myWordArray);
+     System.out.println(reversed);
+    }
+    
+    
+    
+    public static void main(String[] args) {
+        TextEditor myWord = new TextEditor();
+        myWord.reverseString("liverpool");
+    }
+}
