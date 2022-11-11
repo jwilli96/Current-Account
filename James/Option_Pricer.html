@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+ <input type="hidden" value="1" id="total_chq">
+<body>
+    <div id="container"></div>
+</body>
+
+ <table id="table1">
+    <tbody>
+         <tr><td><label for="Leg-Options">Leg1:</label></td>
+			<td><select id = "myList" onchange="addColumn(event)">
+  					<option>Add Leg</option>
+  					<option>Duplicate Leg</option>
+ 					<option>Remove Leg</option>
+				</select>
+			</td>
+		</tr>
+            <tr><td><label for="spot">Spot:</label></td><td><input id="1" type="text" name="t1"></td></tr>
+            <tr><td><label for="time to maturity">Maturity:</label></td><td><input id="2"  type="text" name="t2"></td></tr>
+            <tr><td><label for="notional">Notional:</label></td><td><input id="3"  type="text" name="t3"></td></tr>
+            <tr><td><label for="strike">Stike:</label></td><td><input id="4"  type="text" name="t4"></td></tr>
+            <tr><td><label for="ivol">ivol:</label></td><td><input id="5"  type="text" name="t5"></td></tr>
+            <tr><td><label for="option price">Option Price:</label></td><td><input id="6"  type="text" name="t6"></td></tr>
+            <tr><td><label for="spot min">Spot min:</label></td><td><input id="7"  type="text" name="t7"></td></tr>
+            <tr><td><label for="spot max">Spot max:</label></td><td><input id="8"  type="text" name="t8"></td></tr>
+    </tbody>
+  </table>
+
+  <script language="javascript" type="text/javascript">
+  
+  
+  function addColumn(evt) {
+	  var j = 0;
+	  var k = 0;
+	  var k = 9;
+	  var saved = '';
+
+	  if (evt.target.value === "Duplicate Leg") {
+		  
+
+		  //increase leg count by 1
+			var new_chq_no = parseInt($('#total_chq').val())+1;
+		    var new_input="<input type='text' id='new_"+new_chq_no+"'>";
+		    $('#new_chq').append(new_input);
+		    $('#total_chq').val(new_chq_no)
+				    
+			for (const [i, row] of [...document.querySelectorAll('#table1 tr')].entries()) {
+				// add dropdown to the first row of the new column
+				if (i == 0) {							
+					saved = $("#myList").clone().attr("id","myList" + last_chq_no);
+					const cell = document.createElement(i ? "td" : "th")
+					saved.appendTo(cell);
+					row.appendChild(cell)		
+				
+				}
+				// add textboxes from row 2 until last row in table
+				else {
+					if (new_chq_no == 2) {
+						j++;
+		  				const input = document.createElement("input")
+		  				input.setAttribute("id", j + 8, "class", "secure");
+		  				input.value = document.getElementById(j).value;
+		    			const cell = document.createElement(i ? "td" : "th")
+		    			cell.appendChild(input)   
+		    			row.appendChild(cell)
+					}
+   
+					else {
+		  				k++;
+		  				const input = document.createElement("input")
+		  				input.setAttribute("id", (8 * (new_chq_no - 2)) + (k - 1), "class", "secure");
+		  				input.value = document.getElementById(((8 * (new_chq_no - 2)) + (k - 1)) - 8 ).value;
+		    			const cell = document.createElement(i ? "td" : "th")
+		    			cell.appendChild(input)   
+		    			row.appendChild(cell)
+					}
+				}
+    			
+  		}
+
+
+	}
+		else if (evt.target.value === "Remove Leg") {
+			var last_chq_no = $('#total_chq').val();
+			//only remove leg if the number of legs > 1
+			if(last_chq_no > 1){
+			  var allRows = document.getElementById('table1').rows;
+			  for (var i=0; i< allRows.length; i++) {
+			    allRows[i].deleteCell(-1); 
+			  }
+			  //decrease leg count by 1
+				var new_chq_no = parseInt($('#total_chq').val())-1;
+			    var new_input="<input type='text' id='new_"+new_chq_no+"'>";
+			    $('#new_chq').append(new_input);
+			    $('#total_chq').val(new_chq_no)
+			  }
+
+		}
+		else {
+			 
+			//increase leg count by 1
+			var new_chq_no = parseInt($('#total_chq').val())+1;
+		    var new_input="<input type='text' id='new_"+new_chq_no+"'>";
+		    $('#new_chq').append(new_input);
+		    $('#total_chq').val(new_chq_no)
+			
+			for (const [i, row] of [...document.querySelectorAll('#table1 tr')].entries()) {
+				// add dropdown to the first row of the new column
+				if (i == 0) {	
+					saved = $("#myList").clone().attr("id","myList" + last_chq_no);
+					const cell = document.createElement(i ? "td" : "th")
+					saved.appendTo(cell);
+					row.appendChild(cell)	
+				}
+				// add textboxes from row 2 until last row in table
+				else {
+	  				k++;
+	  				const input = document.createElement("input")
+	  				input.setAttribute("id", (8 * (new_chq_no - 2)) + (k - 1), "class", "secure");
+	    			const cell = document.createElement(i ? "td" : "th")
+	    			cell.appendChild(input)   
+	    			row.appendChild(cell)
+				}
+    			
+  		}
+		}
+
+}
+
+
+</script> 
+
+<head>
+  <script type="text/javascript">
+	var i,j,k;
+	i = 400;
+	j = 500;
+	k = j - i;
+	
+	//last_chq_no is the current number of inputboxes
+	
+  window.onload = function () {
+    var chart = new CanvasJS.Chart("chartContainer",
+    {
+
+      title:{
+      text: "PnL at Expiry"
+      },
+       data: [
+      {
+        type: "line",
+
+        dataPoints: [
+        { x: 10, y: 150 },
+        { x: 20, y: 200 },
+        { x: 30, y: 500}
+        ]
+      }
+      ]
+    });
+
+    chart.render();
+  }
+  </script>
+ <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script></head>
+<body>
+  <div id="chartContainer" style="height: 300px; width: 100%;">
+  </div>
+</body>
+</html>
