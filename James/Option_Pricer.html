@@ -49,6 +49,7 @@
 				// add dropdown to the first row of the new column
 				if (i == 0) {							
 					saved = $("#myList").clone().attr("id","myList" + last_chq_no);
+					saved.attr("id", "column" + new_chq_no);
 					const cell = document.createElement(i ? "td" : "th")
 					saved.appendTo(cell);
 					row.appendChild(cell)		
