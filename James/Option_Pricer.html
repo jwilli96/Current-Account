@@ -9,7 +9,7 @@
  <table id="table1">
     <tbody>
          <tr><td><label for="Leg-Options">Leg1:</label></td>
-			<td><select id = "myList" onchange="addColumn(event)">
+			<td><select id = "column1" onchange="addColumn(event)">
   					<option>Add Leg</option>
   					<option>Duplicate Leg</option>
  					<option>Remove Leg</option>
@@ -29,18 +29,18 @@
 
   <script language="javascript" type="text/javascript">
   
-  
   function addColumn(evt) {
-	  //alert(clicked_id);
 	  var j = 0;
 	  var k = 0;
 	  var k = 9;
+	  var m = 0;
 	  var saved = '';
-      var clickedId= $(this).attr("id");
+	  var lastActiveToolIdFull = evt.target.id;
+	  var lastActiveToolIdShort = lastActiveToolIdFull.substring(lastActiveToolIdFull.length - 1);
+	  alert(lastActiveToolIdShort);
 
 	  if (evt.target.value === "Duplicate Leg") {
-		  
-
+		    
 		  //increase leg count by 1
 			var new_chq_no = parseInt($('#total_chq').val())+1;
 		    var new_input="<input type='text' id='new_"+new_chq_no+"'>";
@@ -50,12 +50,12 @@
 			for (const [i, row] of [...document.querySelectorAll('#table1 tr')].entries()) {
 				// add dropdown to the first row of the new column
 				if (i == 0) {							
-					saved = $("#myList").clone().attr("id","myList" + last_chq_no);
+					saved = $("#column1").clone().attr("id","myList" + last_chq_no);
 					saved.attr("id", "column" + new_chq_no);
 					const cell = document.createElement(i ? "td" : "th")
 					saved.appendTo(cell);
-					row.appendChild(cell)		
-				
+					row.appendChild(cell)	
+									
 				}
 				// add textboxes from row 2 until last row in table
 				else {
@@ -72,19 +72,21 @@
    					// if it's any other column take the previous columns values
 					else {
 		  				k++;
+		  				m++;
 		  				const input = document.createElement("input")
 		  				input.setAttribute("id", (8 * (new_chq_no - 2)) + (k - 1), "class", "secure");
-		  				input.value = document.getElementById(((8 * (new_chq_no - 2)) + (k - 1)) - 8 ).value;
+		  				input.value = document.getElementById(8 * (lastActiveToolIdShort - 1) + m).value;
 		    			const cell = document.createElement(i ? "td" : "th")
 		    			cell.appendChild(input)   
 		    			row.appendChild(cell)
+
 					}
 				}
     			
   		}
 
-
 	}
+
 		else if (evt.target.value === "Remove Leg") {
 			var last_chq_no = $('#total_chq').val();
 			//only remove leg if the number of legs > 1
@@ -112,7 +114,7 @@
 			for (const [i, row] of [...document.querySelectorAll('#table1 tr')].entries()) {
 				// add dropdown to the first row of the new column
 				if (i == 0) {	
-					saved = $("#myList").clone().attr("id","myList" + last_chq_no);
+					saved = $("#column1").clone().attr("id","myList" + last_chq_no);
 					saved.attr("id", "column" + new_chq_no);
 					const cell = document.createElement(i ? "td" : "th")
 					saved.appendTo(cell);
@@ -131,6 +133,7 @@
   		}
 		}
 }
+
 
 
 </script> 
