@@ -31,10 +31,12 @@
   
   
   function addColumn(evt) {
+	  //alert(clicked_id);
 	  var j = 0;
 	  var k = 0;
 	  var k = 9;
 	  var saved = '';
+      var clickedId= $(this).attr("id");
 
 	  if (evt.target.value === "Duplicate Leg") {
 		  
@@ -57,6 +59,7 @@
 				}
 				// add textboxes from row 2 until last row in table
 				else {
+					// if it's the second column take values from the first column
 					if (new_chq_no == 2) {
 						j++;
 		  				const input = document.createElement("input")
@@ -66,7 +69,7 @@
 		    			cell.appendChild(input)   
 		    			row.appendChild(cell)
 					}
-   
+   					// if it's any other column take the previous columns values
 					else {
 		  				k++;
 		  				const input = document.createElement("input")
@@ -110,9 +113,10 @@
 				// add dropdown to the first row of the new column
 				if (i == 0) {	
 					saved = $("#myList").clone().attr("id","myList" + last_chq_no);
+					saved.attr("id", "column" + new_chq_no);
 					const cell = document.createElement(i ? "td" : "th")
 					saved.appendTo(cell);
-					row.appendChild(cell)	
+					row.appendChild(cell)		
 				}
 				// add textboxes from row 2 until last row in table
 				else {
@@ -126,7 +130,6 @@
     			
   		}
 		}
-
 }
 
 
