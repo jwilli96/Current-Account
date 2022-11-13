@@ -30,8 +30,8 @@
    <table id="table2">
     <tbody>
     		<td bgcolor="#FFFFFF" style="line-height:10px;" colspan=3>&nbsp;</td>
-            <tr><td><label for="spot min">Spot min:</label></td><td><input id="7"  type="text" name="t7"></td></tr>
-            <tr><td><label for="spot max">Spot max:</label></td><td><input id="8"  type="text" name="t8"></td></tr>
+            <tr><td><label for="spot min">Spot min:</label></td><td><input id="spotMin"  type="text" name="t7"></td></tr>
+            <tr><td><label for="spot max">Spot max:</label></td><td><input id="spotMax"  type="text" name="t8"></td></tr>
     </tbody>
   </table>
   
@@ -182,10 +182,15 @@
     
 	$("#updateDataPoint").click(function () {
 
-		var something = document.getElementById(7).value;
-		var graphValue = parseInt(something);
+		var lastPoint = document.getElementById("spotMax").value;
+		var lastPointValue = parseInt(lastPoint);
+		
+		var firstPoint = document.getElementById("spotMin").value;
+		var firstPointValue = parseInt(firstPoint);
+		
 		var length = chart.options.data[0].dataPoints.length;
-		chart.options.data[0].dataPoints[length-1].y = graphValue;
+		chart.options.data[0].dataPoints[0].x = firstPointValue;
+		chart.options.data[0].dataPoints[length-1].x = lastPointValue;
 		chart.render();
 
 		}); 
