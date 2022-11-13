@@ -22,6 +22,12 @@
             <tr><td><label for="strike">Stike:</label></td><td><input id="4"  type="text" name="t4"></td></tr>
             <tr><td><label for="ivol">ivol:</label></td><td><input id="5"  type="text" name="t5"></td></tr>
             <tr><td><label for="option price">Option Price:</label></td><td><input id="6"  type="text" name="t6"></td></tr>
+    </tbody>
+  </table>
+  
+   <table id="table2">
+    <tbody>
+    		<td bgcolor="#FFFFFF" style="line-height:10px;" colspan=3>&nbsp;</td>
             <tr><td><label for="spot min">Spot min:</label></td><td><input id="7"  type="text" name="t7"></td></tr>
             <tr><td><label for="spot max">Spot max:</label></td><td><input id="8"  type="text" name="t8"></td></tr>
     </tbody>
@@ -32,12 +38,12 @@
   function addColumn(evt) {
 	  var j = 0;
 	  var k = 0;
-	  var k = 9;
 	  var m = 0;
+	  var rowCount = 6;
+	  var k = rowCount + 1;
 	  var saved = '';
 	  var lastActiveToolIdFull = evt.target.id;
 	  var lastActiveToolIdShort = lastActiveToolIdFull.substring(lastActiveToolIdFull.length - 1);
-	  alert(lastActiveToolIdShort);
 
 	  if (evt.target.value === "Duplicate Leg") {
 		    
@@ -63,7 +69,7 @@
 					if (new_chq_no == 2) {
 						j++;
 		  				const input = document.createElement("input")
-		  				input.setAttribute("id", j + 8, "class", "secure");
+		  				input.setAttribute("id", j + rowCount, "class", "secure");
 		  				input.value = document.getElementById(j).value;
 		    			const cell = document.createElement(i ? "td" : "th")
 		    			cell.appendChild(input)   
@@ -74,8 +80,8 @@
 		  				k++;
 		  				m++;
 		  				const input = document.createElement("input")
-		  				input.setAttribute("id", (8 * (new_chq_no - 2)) + (k - 1), "class", "secure");
-		  				input.value = document.getElementById(8 * (lastActiveToolIdShort - 1) + m).value;
+		  				input.setAttribute("id", (rowCount * (new_chq_no - 2)) + (k - 1), "class", "secure");
+		  				input.value = document.getElementById(rowCount * (lastActiveToolIdShort - 1) + m).value;
 		    			const cell = document.createElement(i ? "td" : "th")
 		    			cell.appendChild(input)   
 		    			row.appendChild(cell)
@@ -124,7 +130,7 @@
 				else {
 	  				k++;
 	  				const input = document.createElement("input")
-	  				input.setAttribute("id", (8 * (new_chq_no - 2)) + (k - 1), "class", "secure");
+	  				input.setAttribute("id", (rowCount * (new_chq_no - 2)) + (k - 1), "class", "secure");
 	    			const cell = document.createElement(i ? "td" : "th")
 	    			cell.appendChild(input)   
 	    			row.appendChild(cell)
