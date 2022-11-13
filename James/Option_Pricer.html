@@ -167,8 +167,8 @@
       },
       axisX:{
           title: "Axis X with maximum 610",
-        //minimum: 1.0,
-        //maximum: 1.3
+        minimum: 1.0,
+        maximum: 1.3
        },
        data: [
       {
@@ -198,14 +198,19 @@
 		var lastPointValueX = parseFloat(lastPointX);
 				
 		var optionValue = document.getElementById(6).value;
-		var optionValueInt = parseFloat(optionValue) * -1;
+		var optionValueFloat = parseFloat(optionValue) * -1;
+		
+		var firstPointY = Math.max(firstPointValueX - secondPointValueX, 0) + optionValueFloat;
+		var secondPointY = Math.max(secondPointValueX - secondPointValueX, 0) + optionValueFloat;
+		var lastPointY = Math.max(lastPointValueX - secondPointValueX, 0) + optionValueFloat;
 		
 		var length = chart.options.data[0].dataPoints.length;
 		chart.options.data[0].dataPoints[0].x = firstPointValueX;
 		chart.options.data[0].dataPoints[1].x = secondPointValueX;
 		chart.options.data[0].dataPoints[length-1].x = lastPointValueX;
-		chart.options.data[0].dataPoints[0].y = optionValueInt;
-		chart.options.data[0].dataPoints[1].y = optionValueInt;
+		chart.options.data[0].dataPoints[0].y = firstPointY;
+		chart.options.data[0].dataPoints[1].y = secondPointY;
+		chart.options.data[0].dataPoints[length-1].y = lastPointY;
 		chart.render();
 
 		}); 
