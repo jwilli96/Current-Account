@@ -159,6 +159,20 @@
 					saved.appendTo(cell);
 					row.appendChild(cell)		
 				}
+				else if (i == 1) {
+					direction = $("#direction0").clone().attr("id","direction" + last_chq_no);
+					direction.attr("id", "direction" + new_chq_no);
+					const cellOne = document.createElement(i ? "td" : "th")
+					direction.appendTo(cellOne);
+					row.appendChild(cellOne)
+				}
+				else if (i == 2) {
+					callPut = $("#CallPut0").clone().attr("id","CallPut" + last_chq_no);
+					callPut.attr("id", "CallPut" + new_chq_no);
+					const cellTwo = document.createElement(i ? "td" : "th")
+					callPut.appendTo(cellTwo);
+					row.appendChild(cellTwo)
+				}
 				// add textboxes from row 2 until last row in table
 				else {
 	  				k++;
