@@ -11,13 +11,25 @@
  <table id="table1">
     <tbody>
          <tr><td><label for="Leg-Options">Leg1:</label></td>
-			<td><select id = "column1" onchange="addColumn(event)">
+			<td><select id = "column1" style="width: 110px" onchange="addColumn(event)">
   					<option>Add Leg</option>
   					<option>Duplicate Leg</option>
  					<option>Remove Leg</option>
 				</select>
 			</td>
 		</tr>
+
+            
+			<tr><td><label for="myDirection">Direction</label></td><td><select id = "direction" style="width: 110px">
+  				<option>Buy</option>
+ 				<option>Sell</option>
+			</select></td></tr>
+			
+			<tr><td><label for="CallPut">Call/Put</label></td><td><select id = "CallPut" style="width: 110px">
+  				<option>Call</option>
+ 				<option>Put</option>
+			</select></td></tr>
+			
             <tr><td><label for="spot">Spot:</label></td><td><input id="1" type="text" name="t1"></td></tr>
             <tr><td><label for="time to maturity">Maturity:</label></td><td><input id="2"  type="text" name="t2"></td></tr>
             <tr><td><label for="notional">Notional:</label></td><td><input id="3"  type="text" name="t3"></td></tr>
