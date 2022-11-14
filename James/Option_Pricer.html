@@ -20,12 +20,12 @@
 		</tr>
 
             
-			<tr><td><label for="myDirection">Direction</label></td><td><select id = "direction" style="width: 110px">
+			<tr><td><label for="myDirection">Direction</label></td><td><select id = "direction0" style="width: 110px">
   				<option>Buy</option>
  				<option>Sell</option>
 			</select></td></tr>
 			
-			<tr><td><label for="CallPut">Call/Put</label></td><td><select id = "CallPut" style="width: 110px">
+			<tr><td><label for="CallPut">Call/Put</label></td><td><select id = "CallPut0" style="width: 110px">
   				<option>Call</option>
  				<option>Put</option>
 			</select></td></tr>
@@ -58,7 +58,7 @@
 	  var j = 0;
 	  var k = 0;
 	  var m = 0;
-	  var rowCount = 6;
+	  var rowCount = 8;
 	  var k = rowCount + 1;
 	  var saved = '';
 	  var lastActiveToolIdFull = evt.target.id;
@@ -82,9 +82,23 @@
 					row.appendChild(cell)	
 									
 				}
+				else if (i == 1) {
+					direction = $("#direction0").clone().attr("id","direction" + last_chq_no);
+					direction.attr("id", "direction" + new_chq_no);
+					const cellOne = document.createElement(i ? "td" : "th")
+					direction.appendTo(cellOne);
+					row.appendChild(cellOne)
+				}
+				else if (i == 2) {
+					callPut = $("#CallPut0").clone().attr("id","CallPut" + last_chq_no);
+					callPut.attr("id", "CallPut" + new_chq_no);
+					const cellTwo = document.createElement(i ? "td" : "th")
+					callPut.appendTo(cellTwo);
+					row.appendChild(cellTwo)
+				}
 				// add textboxes from row 2 until last row in table
 				else {
-					// if it's the second column take values from the first column
+					//if it's the second column take values from the first column
 					if (new_chq_no == 2) {
 						j++;
 		  				const input = document.createElement("input")
