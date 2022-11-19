@@ -64,8 +64,8 @@
    <table id="table2">
     <tbody>
     		<td bgcolor="#FFFFFF" style="line-height:10px;" colspan=3>&nbsp;</td>
-            <tr><td><label for="spot min">Spot min:</label></td><td><input id="spotMin"  type="text" name="t7"></td></tr>
-            <tr><td><label for="spot max">Spot max:</label></td><td><input id="spotMax"  type="text" name="t8"></td></tr>
+            <tr><td><label for="spot min">Spot min:</label></td><td><input id="spotMin"  type="text" name="t10"></td></tr>
+            <tr><td><label for="spot max">Spot max:</label></td><td><input id="spotMax"  type="text" name="t11"></td></tr>
     </tbody>
   </table>
   
@@ -249,6 +249,10 @@
 	//last_chq_no is the current number of inputboxes
 	
   window.onload = function () {
+	
+	  var spotMin = document.getElementById("spotMin").value;
+		var sportMinFloat = parseFloat(spotMin);	
+		
     var chart = new CanvasJS.Chart("chartContainer",
     {
 
@@ -256,28 +260,46 @@
       text: "PnL at Expiry"
       },
       axisX:{
-          title: "Axis X with maximum 610",
-        minimum: 1.10,
-        maximum: 1.18
-       },
-       data: [
-      {
-        type: "line",
+    	  title: "Axis X with maximum 610",
+    	  minimum: 1.10,
+          maximum: 1.18,
+		},
+		axisY:{
+	    	  title: "Axis X with maximum 610",
+	    	  minimum: -10000,
+	          maximum: 10000,
+				stripLines:[
+				{                
+					color:"#23EA23",
+					value:0
+				}
+				]
+			},
+      
+		data: [
+	   {
+		type: "line",
 
-        dataPoints: [
-        { x: 1.05, y: 150 },
-        { x: 1.06, y: 200 },
-        { x: 1.07, y: 500}
-        ]
-      }
-      ]
+		dataPoints: [
+		{ x: 1.05, y: 150 },
+		{ x: 1.06, y: 200 },
+		{ x: 1.07, y: 500}
+	    ]
+	   }
+	   ]
     });
 
     chart.render();
     
 	$("#updateDataPoint").click(function () {
+		
+		var new_chq_no = parseInt($('#total_chq').val())+1;
+	    var new_input="<input type='text' id='new_"+new_chq_no+"'>";
+	    $('#new_chq').append(new_input);
+	    $('#total_chq').val(new_chq_no)
 
-		var firstPointX = document.getElementById("spotMin").value;
+		
+	    var firstPointX = document.getElementById("spotMin").value;
 		var firstPointValueX = parseFloat(firstPointX);
 		
 		var Notional = document.getElementById("5").value;
@@ -305,7 +327,6 @@
 		chart.options.data[0].dataPoints[0].x = firstPointValueX;
 		chart.options.data[0].dataPoints[1].x = secondPointValueX;
 		chart.options.data[0].dataPoints[length-1].x = lastPointValueX;
-		
 		
 		
 		//Call Option pricing
