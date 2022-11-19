@@ -20,14 +20,14 @@
 		</tr>
 
             
-			<tr><td><label for="myDirection">Direction</label></td><td><select id = "direction0" style="width: 110px">
-  				<option>Buy</option>
- 				<option>Sell</option>
+			<tr><td><label for="myDirection">Direction</label></td><td><select id = "direction1" style="width: 110px">
+  				<option value='0'>Buy</option>
+ 				<option value='1'>Sell</option>
 			</select></td></tr>
 			
-			<tr><td><label for="CallPut">Call/Put</label></td><td><select id = "CallPut0" style="width: 110px">
-  				<option>Call</option>
- 				<option>Put</option>
+			<tr><td><label for="CallPut">Call/Put</label></td><td><select id = "CallPut1" style="width: 110px">
+  				<option value='0'>Call</option>
+ 				<option value='1'>Put</option>
 			</select></td></tr>
 			
             <tr><td><label for="spot">Spot:</label></td><td><input id="1" type="text" name="t1"></td></tr>
@@ -73,30 +73,43 @@
 		    $('#total_chq').val(new_chq_no)
 				    
 			for (const [i, row] of [...document.querySelectorAll('#table1 tr')].entries()) {
-				// add dropdown to the first row of the new column
+				// add the Leg dropdown to the first row of the new column
 				if (i == 0) {							
 					saved = $("#column1").clone().attr("id","myList" + last_chq_no);
 					saved.attr("id", "column" + new_chq_no);
 					const cell = document.createElement(i ? "td" : "th")
 					saved.appendTo(cell);
 					row.appendChild(cell)	
-									
+				// add the Direction dropdown to the second row of the new column		
 				}
 				else if (i == 1) {
-					direction = $("#direction0").clone().attr("id","direction" + last_chq_no);
+					direction = $("#direction1").clone().attr("id","direction" + last_chq_no);
 					direction.attr("id", "direction" + new_chq_no);
+					
+					var selectTest = document.getElementById('direction1');			
+					dropdownSelected = selectTest.selectedIndex;
+					direction[0].value = dropdownSelected;
+
 					const cellOne = document.createElement(i ? "td" : "th")
 					direction.appendTo(cellOne);
 					row.appendChild(cellOne)
+
+					
 				}
+				// add the CallPut dropdown to the third row of the new column
 				else if (i == 2) {
-					callPut = $("#CallPut0").clone().attr("id","CallPut" + last_chq_no);
+					callPut = $("#CallPut1").clone().attr("id","CallPut" + last_chq_no);
 					callPut.attr("id", "CallPut" + new_chq_no);
+					
+					var callPutTest = document.getElementById('CallPut1');				
+					callPutSelected = callPutTest.selectedIndex;
+					callPut[0].value = callPutSelected;
+								
 					const cellTwo = document.createElement(i ? "td" : "th")
 					callPut.appendTo(cellTwo);
 					row.appendChild(cellTwo)
 				}
-				// add textboxes from row 2 until last row in table
+				// add textboxes from row 4 until last row in table
 				else {
 					//if it's the second column take values from the first column
 					if (new_chq_no == 2) {
@@ -159,15 +172,17 @@
 					saved.appendTo(cell);
 					row.appendChild(cell)		
 				}
+				// add the Direction dropdown
 				else if (i == 1) {
-					direction = $("#direction0").clone().attr("id","direction" + last_chq_no);
+					direction = $("#direction1").clone().attr("id","direction" + last_chq_no);
 					direction.attr("id", "direction" + new_chq_no);
 					const cellOne = document.createElement(i ? "td" : "th")
 					direction.appendTo(cellOne);
 					row.appendChild(cellOne)
 				}
+				// add the CallPut dropdown
 				else if (i == 2) {
-					callPut = $("#CallPut0").clone().attr("id","CallPut" + last_chq_no);
+					callPut = $("#CallPut1").clone().attr("id","CallPut" + last_chq_no);
 					callPut.attr("id", "CallPut" + new_chq_no);
 					const cellTwo = document.createElement(i ? "td" : "th")
 					callPut.appendTo(cellTwo);
