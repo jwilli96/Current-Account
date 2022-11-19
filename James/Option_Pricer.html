@@ -108,9 +108,9 @@
 					direction = $("#direction1").clone().attr("id","direction" + last_chq_no);
 					direction.attr("id", "direction" + new_chq_no);
 					
-					var selectTest = document.getElementById('direction1');			
-					dropdownSelected = selectTest.selectedIndex;
-					direction[0].value = dropdownSelected;
+					var directionTest = document.getElementById('direction1');			
+					directionSelected = directionTest.selectedIndex;
+					direction[0].value = directionSelected;
 
 					const cellOne = document.createElement(i ? "td" : "th")
 					direction.appendTo(cellOne);
@@ -296,20 +296,17 @@
 		var secondPointY = Math.max(secondPointValueX - secondPointValueX, 0) + optionValueFloat;
 		var lastPointY = (lastPointValueX * (NotionalFloat)/secondPointValueX) - NotionalFloat  + optionValueFloat;
 		
-		var callPutTest = document.getElementById('CallPut1');				
-		callPutSelected = callPutTest.selectedIndex;
-		
+		var directionTest = document.getElementById('direction1');				
+		directionSelected = directionTest.selectedIndex;
+			
 		var length = chart.options.data[0].dataPoints.length;
 		chart.options.data[0].dataPoints[0].x = firstPointValueX;
 		chart.options.data[0].dataPoints[1].x = secondPointValueX;
 		chart.options.data[0].dataPoints[length-1].x = lastPointValueX;
-		chart.options.data[0].dataPoints[0].y = firstPointY;
-		chart.options.data[0].dataPoints[1].y = secondPointY;
-		chart.options.data[0].dataPoints[length-1].y = lastPointY;
 		
 		//Call Option pricing
 		
-		/* if (callPutSelected == 0) {
+		if (directionSelected == 0) {
 			
 			chart.options.data[0].dataPoints[0].y = firstPointY;
 			chart.options.data[0].dataPoints[1].y = secondPointY;
@@ -319,7 +316,7 @@
 			chart.options.data[0].dataPoints[0].y = -firstPointY;
 			chart.options.data[0].dataPoints[1].y = -secondPointY;
 			chart.options.data[0].dataPoints[length-1].y = -lastPointY;
-		} */
+		}
 		
 		
 		chart.render();
