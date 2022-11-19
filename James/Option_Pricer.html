@@ -298,24 +298,49 @@
 		
 		var directionTest = document.getElementById('direction1');				
 		directionSelected = directionTest.selectedIndex;
+		var callPutTest = document.getElementById('CallPut1');				
+		callPutSelected = callPutTest.selectedIndex;
 			
 		var length = chart.options.data[0].dataPoints.length;
 		chart.options.data[0].dataPoints[0].x = firstPointValueX;
 		chart.options.data[0].dataPoints[1].x = secondPointValueX;
 		chart.options.data[0].dataPoints[length-1].x = lastPointValueX;
 		
-		//Call Option pricing
 		
-		if (directionSelected == 0) {
+		
+		//Call Option pricing
+		if (callPutSelected == 0) {
 			
-			chart.options.data[0].dataPoints[0].y = firstPointY;
-			chart.options.data[0].dataPoints[1].y = secondPointY;
-			chart.options.data[0].dataPoints[length-1].y = lastPointY;
+			//Buy CAll
+			if (directionSelected == 0) {
+			
+				chart.options.data[0].dataPoints[0].y = firstPointY;
+				chart.options.data[0].dataPoints[1].y = secondPointY;
+				chart.options.data[0].dataPoints[length-1].y = lastPointY;
+			}
+			//Sell CAll
+			else {
+				chart.options.data[0].dataPoints[0].y = -firstPointY;
+				chart.options.data[0].dataPoints[1].y = -secondPointY;
+				chart.options.data[0].dataPoints[length-1].y = -lastPointY;
+			}
 		}
+		//Put Option pricing
 		else {
-			chart.options.data[0].dataPoints[0].y = -firstPointY;
-			chart.options.data[0].dataPoints[1].y = -secondPointY;
-			chart.options.data[0].dataPoints[length-1].y = -lastPointY;
+			
+			//Buy Put
+			if (directionSelected == 0) {
+				
+				chart.options.data[0].dataPoints[0].y = lastPointY ;
+				chart.options.data[0].dataPoints[1].y = secondPointY;
+				chart.options.data[0].dataPoints[length-1].y = firstPointY;
+			}
+			//Sell Put
+			else {
+				chart.options.data[0].dataPoints[0].y = -lastPointY;
+				chart.options.data[0].dataPoints[1].y = -secondPointY;
+				chart.options.data[0].dataPoints[length-1].y = -firstPointY;
+			}
 		}
 		
 		
