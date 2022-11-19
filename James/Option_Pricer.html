@@ -280,21 +280,24 @@
 		var firstPointX = document.getElementById("spotMin").value;
 		var firstPointValueX = parseFloat(firstPointX);
 		
-		var Notional = document.getElementById("3").value;
+		var Notional = document.getElementById("5").value;
 		var NotionalFloat = parseFloat(Notional);
 		
-		var secondPointX = document.getElementById("4").value;
+		var secondPointX = document.getElementById("7").value;
 		var secondPointValueX = parseFloat(secondPointX);
 			
 		var lastPointX = document.getElementById("spotMax").value;
 		var lastPointValueX = parseFloat(lastPointX);
 				
-		var optionValue = document.getElementById(6).value;
+		var optionValue = document.getElementById("9").value;
 		var optionValueFloat = parseFloat(optionValue) * -1;
 		
 		var firstPointY = Math.max(firstPointValueX - secondPointValueX, 0) + optionValueFloat;
 		var secondPointY = Math.max(secondPointValueX - secondPointValueX, 0) + optionValueFloat;
 		var lastPointY = (lastPointValueX * (NotionalFloat)/secondPointValueX) - NotionalFloat  + optionValueFloat;
+		
+		var callPutTest = document.getElementById('CallPut1');				
+		callPutSelected = callPutTest.selectedIndex;
 		
 		var length = chart.options.data[0].dataPoints.length;
 		chart.options.data[0].dataPoints[0].x = firstPointValueX;
@@ -303,6 +306,22 @@
 		chart.options.data[0].dataPoints[0].y = firstPointY;
 		chart.options.data[0].dataPoints[1].y = secondPointY;
 		chart.options.data[0].dataPoints[length-1].y = lastPointY;
+		
+		//Call Option pricing
+		
+		/* if (callPutSelected == 0) {
+			
+			chart.options.data[0].dataPoints[0].y = firstPointY;
+			chart.options.data[0].dataPoints[1].y = secondPointY;
+			chart.options.data[0].dataPoints[length-1].y = lastPointY;
+		}
+		else {
+			chart.options.data[0].dataPoints[0].y = -firstPointY;
+			chart.options.data[0].dataPoints[1].y = -secondPointY;
+			chart.options.data[0].dataPoints[length-1].y = -lastPointY;
+		} */
+		
+		
 		chart.render();
 
 		}); 
