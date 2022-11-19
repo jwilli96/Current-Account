@@ -24,18 +24,40 @@
   				<option value='0'>Buy</option>
  				<option value='1'>Sell</option>
 			</select></td></tr>
-			
+		
 			<tr><td><label for="CallPut">Call/Put</label></td><td><select id = "CallPut1" style="width: 110px">
   				<option value='0'>Call</option>
  				<option value='1'>Put</option>
+			
 			</select></td></tr>
 			
-            <tr><td><label for="spot">Spot:</label></td><td><input id="1" type="text" name="t1"></td></tr>
-            <tr><td><label for="time to maturity">Maturity:</label></td><td><input id="2"  type="text" name="t2"></td></tr>
-            <tr><td><label for="notional">Notional:</label></td><td><input id="3"  type="text" name="t3"></td></tr>
-            <tr><td><label for="strike">Stike:</label></td><td><input id="4"  type="text" name="t4"></td></tr>
-            <tr><td><label for="ivol">ivol:</label></td><td><input id="5"  type="text" name="t5"></td></tr>
-            <tr><td><label for="option price">Option Price:</label></td><td><input id="6"  type="text" name="t6"></td></tr>
+				<tr><td><label for="Expiry">Expiry</label></td><td><select id = "Expiry1" style="width: 110px">
+  				<option value='0'>1 Week</option>
+ 				<option value='1'>2 Weeks</option>
+ 				<option value='2'>3 Weeks</option>
+ 				<option value='3'>4 Weeks</option>
+ 				<option value='4'>1 Month</option>
+ 				<option value='5'>2 Months</option>
+ 				<option value='6'>3 Months</option>
+ 				<option value='7'>4 Months</option>
+ 				<option value='8'>5 Months</option>
+ 				<option value='9'>6 Months</option>
+ 				<option value='10'>9 Months</option>
+ 				<option value='12'>1 Year</option>
+ 				<option value='13'>18 Months</option>
+ 				<option value='14'>2 Years</option>
+ 				
+			</select></td></tr>
+					
+			<tr><td><label for="asset">Asset:</label></td><td><input id="1" type="text" name="t1"></td></tr>
+			<tr><td><label for="asset direction">Asset Direction:</label></td><td><input id="2" type="text" name="t2"></td></tr>
+            <tr><td><label for="spot">Spot:</label></td><td><input id="3" type="text" name="t3"></td></tr>
+            <tr><td><label for="time to maturity">Maturity:</label></td><td><input id="4"  type="text" name="t4"></td></tr>
+            <tr><td><label for="notional">Notional:</label></td><td><input id="5"  type="text" name="t5"></td></tr>
+            <tr><td><label for="notional currency">Notional Currency:</label></td><td><input id="6"  type="text" name="t6"></td></tr>
+            <tr><td><label for="strike">Stike:</label></td><td><input id="7"  type="text" name="t7"></td></tr>
+            <tr><td><label for="ivol">ivol:</label></td><td><input id="8"  type="text" name="t8"></td></tr>
+            <tr><td><label for="option price">Option Price:</label></td><td><input id="9"  type="text" name="t9"></td></tr>
     </tbody>
   </table>
   
@@ -58,7 +80,7 @@
 	  var j = 0;
 	  var k = 0;
 	  var m = 0;
-	  var rowCount = 8;
+	  var rowCount = 12;
 	  var k = rowCount + 1;
 	  var saved = '';
 	  var lastActiveToolIdFull = evt.target.id;
@@ -108,6 +130,19 @@
 					const cellTwo = document.createElement(i ? "td" : "th")
 					callPut.appendTo(cellTwo);
 					row.appendChild(cellTwo)
+				}
+				// add the Expiry dropdown to the third row of the new column
+				else if (i == 3) {
+					expiry = $("#Expiry1").clone().attr("id","Expiry" + last_chq_no);
+					expiry.attr("id", "Expiry" + new_chq_no);
+					
+					var expiryTest = document.getElementById('Expiry1');				
+					expirySelected = expiryTest.selectedIndex;
+					expiry[0].value = expirySelected;
+								
+					const cellThree = document.createElement(i ? "td" : "th")
+					expiry.appendTo(cellThree);
+					row.appendChild(cellThree)
 				}
 				// add textboxes from row 4 until last row in table
 				else {
