@@ -293,10 +293,11 @@
     
 	$("#updateDataPoint").click(function () {
 		
-		var new_chq_no = parseInt($('#total_chq').val())+1;
+		var new_chq_no = parseInt($('#total_chq').val());
 	    var new_input="<input type='text' id='new_"+new_chq_no+"'>";
 	    $('#new_chq').append(new_input);
-	    $('#total_chq').val(new_chq_no)
+	    $('#total_chq').val(new_chq_no);
+	    var last_chq_no = $('#total_chq').val();
 
 		
 	    var firstPointX = document.getElementById("spotMin").value;
@@ -366,6 +367,27 @@
 		
 		
 		chart.render();
+		
+		var newSeries = {
+		        type: "line",
+		        dataPoints: [
+		            { x: 1.0, y: 5000 },
+		            { x: 1.11, y: 55},
+		            { x: 1.14, y: 95 }
+		        ]
+		    };
+		    //chart.options.data.push(newSeries);
+		    //chart.options.data[0].dataPoints.push({ x: 1.2, y: 5000});
+
+		    for (let i = 1; i < new_chq_no; i++) {
+		    	chart.options.data.push(newSeries);
+		    	chart.options.data[i].dataPoints[0].y = 7000;
+		    	chart.options.data[i].dataPoints[1].y = 7000;
+		    	chart.options.data[i].dataPoints[2].y = -2000;
+		    	chart.render();
+		    }
+		    //chart.options.data[1].dataPoints[1].y = 9000;
+		    //chart.render();
 
 		}); 
   }
@@ -375,5 +397,5 @@
   <div id="chartContainer" style="height: 300px; width: 100%;">
   </div>
 
-</body>
+</body> 
 </html>
