@@ -1,0 +1,87 @@
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+
+public class ExcelTest {
+
+	public static void main(String[] args) throws IOException {
+
+
+		ArrayList<String> arrayCME =new ArrayList<String>();
+		File cme = new File("C:/Users/jhwil/OneDrive/Documents/TT/Queue Questions/CME_Product_Ids.txt");
+		Scanner scanCME = new Scanner(cme);
+		while (scanCME.hasNext()) {
+			arrayCME.add(scanCME.nextLine());
+		}
+
+		//remove column headers
+		arrayCME.remove(0);
+		
+		int idSize = 0;
+		int productSize = 0;
+		int symbolSize = 0;
+		int spaceBetweenIdProduct = 6;
+		int typeStart;
+		int symbolStart;
+		ArrayList<String> cleanArrayCME =new ArrayList<String>();
+		ArrayList<Character> sublist = new ArrayList<Character>();
+		StringBuilder sb = new StringBuilder();
+		
+		
+		for (int i = 0; i < 15; i++) {
+			
+			for (int j = 0; j < 50; j++) {
+				System.out.print(arrayCME.get(i).charAt(j));
+				sublist.add(arrayCME.get(i).charAt(j)); 
+				
+				
+				if (arrayCME.get(i).charAt(j + 1) == ',') {
+					idSize = j;
+					break;	
+				}
+			}
+			
+			
+            for(Character c: sublist) {
+            	sb.append(c);
+            }
+            String tempString = sb.toString();
+            cleanArrayCME.add(tempString);
+			System.out.print(" ");
+			
+				typeStart = idSize + spaceBetweenIdProduct;
+				for (int k = typeStart; k < 500; k++) {
+					System.out.print(arrayCME.get(i).charAt(k));
+					if (arrayCME.get(i).charAt(k  +1) == ',') {
+						productSize = k;
+						break;	
+					}
+				}
+				System.out.print(" ");
+				
+				symbolStart = productSize + 2;
+				for (int l = symbolStart; l < 500; l++) {
+					System.out.print(arrayCME.get(i).charAt(l));
+					if (arrayCME.get(i).charAt(l  +1) == ',') {
+						symbolSize = l;
+						break;	
+					}
+				}
+			System.out.println("");
+			
+		}
+		
+		System.out.println(cleanArrayCME);
+
+		
+	}
+
+}
