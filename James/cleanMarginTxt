@@ -1,0 +1,170 @@
+import java.io.File;
+import java.io.FileInputStream;
+
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Scanner;
+
+import javax.swing.text.html.HTMLDocument.Iterator;
+
+
+public class hangingMan {
+
+	public static void main(String[] args) throws IOException {
+
+		ArrayList<String> arr=new ArrayList<String>();
+		ArrayList<String> arrOutput=new ArrayList<String>();
+		
+		String search = "margin";
+		String product = "product_id";
+		File c = new File("C:/Users/jhwil/OneDrive/Documents/TT/Queue Questions/Control_Credit_checks.txt");
+		
+		
+		Scanner scan = new Scanner(c);
+		
+		//Convert all strings from txt file into array
+		while (scan.hasNext()) {
+			arr.add(scan.nextLine());
+
+		}
+		
+		//Remove all strings that don't contain margin or product_id
+		for (int counter = 0; counter < arr.size(); counter++) { 		      
+	         
+			if ( arr.get(counter).toLowerCase().indexOf(search.toLowerCase()) != -1 || 
+					arr.get(counter).toLowerCase().indexOf(product.toLowerCase()) != -1 ) {
+			  arrOutput.add(arr.get(counter));
+			  
+		  }
+		  		
+      } 
+		//Create array result which converts all strings to characters
+        List<Character> result = new ArrayList<>();
+        arrOutput.stream().
+                forEach(word -> {
+                    List<Character> charArray = new ArrayList<>();
+                    for (Character w : word.toCharArray()) {
+                    	    charArray.add(w);
+                    }              
+                    result.addAll(charArray);
+                });
+        
+        //Remove all the non-essential data
+        List<Character> needToRemove = new ArrayList<>();
+        needToRemove.add(',');
+        needToRemove.add('[');
+        needToRemove.add('"');
+        needToRemove.add(':');
+        needToRemove.add(' ');
+        needToRemove.add('{');
+        needToRemove.add('}');
+        needToRemove.add('.');
+        result.removeAll(needToRemove);
+        
+        //Convert all elements in array 'result' into strings in new array 'finalArray'
+        int size;
+        List<String> finalArray = new ArrayList<>();
+        for (int start = 0; start < result.size(); start += size) {
+            
+        	if (result.get(start) == '0' || result.get(start) == '1' || result.get(start) == '2' || result.get(start) == '3'
+        			|| result.get(start) == '4' || result.get(start) == '5' || result.get(start) == '6' || result.get(start) == '7'
+        			|| result.get(start) == '8' || result.get(start) == '9') {	
+        		
+        		int count = 0;
+        		for (int i = start; i < result.size(); i++) {
+        			if (result.get(i) == '0' || result.get(i) == '1' || result.get(i) == '2' || result.get(i) == '3'
+        					|| result.get(i) == '4' || result.get(i) == '5' || result.get(i) == '6' || result.get(i) == '7'
+        					|| result.get(i) == '8' || result.get(i) == '9') {	
+        				count++;
+        			}
+        			else {
+        				break;
+        			}
+        		}
+        		size = count;
+        			
+        		}
+        	else {
+        		int count = 0;
+        		for (int i = start; i < result.size(); i++) {
+        			if (!(result.get(i) == '0' || result.get(i) == '1' || result.get(i) == '2' || result.get(i) == '3'
+        					|| result.get(i) == '4' || result.get(i) == '5' || result.get(i) == '6' || result.get(i) == '7'
+        					|| result.get(i) == '8' || result.get(i) == '9')) {
+        				count++;
+        			}
+        			else {
+        				break;
+        			}
+        		}
+        		size = count;
+            }
+           
+        	int end = Math.min(start + size, result.size());
+            
+        	List<Character> sublist = result.subList(start, end); 
+            StringBuilder sb = new StringBuilder();
+            
+            for(Character c1: sublist) {
+            	sb.append(c1);
+            }
+            String tempString = sb.toString();
+            finalArray.add(tempString);  
+        }
+        
+        //Remove all the pl elements and their values
+        for (int i = 0; i < finalArray.size(); i++) {
+        	if (finalArray.get(i).equals("pl")) {
+        		finalArray.remove(i);
+            	finalArray.remove(i);
+        		i++;
+            }
+        }
+        System.out.println(finalArray);
+
+
+		System.out.println("Write data to an Excel Sheet");
+		FileOutputStream fos=new FileOutputStream("C:/Users/jhwil/OneDrive/Documents/TT/1.csv");
+		HSSFWorkbook workBook = new HSSFWorkbook();
+		HSSFSheet spreadSheet = workBook.createSheet("Margin Breakdown");
+		HSSFRow row;
+		HSSFCell cell;
+		
+
+		int rowNumber = 3;
+		int colNumber = 3;
+		
+		for(int i=0;i< finalArray.size() ;i++) {		
+
+			row = spreadSheet.createRow(rowNumber);
+			
+			//output margin or product_id
+			cell = row.createCell(colNumber);
+			cell.setCellValue(finalArray.get(i).toString());
+			
+			//output values for margin or product_id
+			cell = row.createCell(colNumber + 1);
+			if (finalArray.get(i).equals("margin")) {
+				cell.setCellValue(Double.parseDouble(finalArray.get(i + 1)));
+			}
+			else {
+			cell.setCellValue(finalArray.get(i + 1).toString());
+			}
+			
+			rowNumber++;
+			i++;
+	}
+		 
+		System.out.println("Done");
+		workBook.write(fos);
+		arr.clear();
+
+}
+}
