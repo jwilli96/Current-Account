@@ -52,20 +52,19 @@
 			<tr><td><label for="asset">Asset:</label></td><td><input id="1" type="text" name="t1"></td></tr>
 			<tr><td><label for="asset direction">Asset Direction:</label></td><td><input id="2" type="text" name="t2"></td></tr>
             <tr><td><label for="spot">Spot:</label></td><td><input id="3" type="text" name="t3"></td></tr>
-            <tr><td><label for="time to maturity">Maturity:</label></td><td><input id="4"  type="text" name="t4"></td></tr>
-            <tr><td><label for="notional">Notional:</label></td><td><input id="5"  type="text" name="t5"></td></tr>
-            <tr><td><label for="notional currency">Notional Currency:</label></td><td><input id="6"  type="text" name="t6"></td></tr>
-            <tr><td><label for="strike">Stike:</label></td><td><input id="7"  type="text" name="t7"></td></tr>
-            <tr><td><label for="ivol">ivol:</label></td><td><input id="8"  type="text" name="t8"></td></tr>
-            <tr><td><label for="option price">Option Price:</label></td><td><input id="9"  type="text" name="t9"></td></tr>
+            <tr><td><label for="notional">Notional:</label></td><td><input id="4"  type="text" name="t4"></td></tr>
+            <tr><td><label for="notional currency">Notional Currency:</label></td><td><input id="5"  type="text" name="t5"></td></tr>
+            <tr><td><label for="strike">Stike:</label></td><td><input id="6"  type="text" name="t6"></td></tr>
+            <tr><td><label for="ivol">ivol:</label></td><td><input id="7"  type="text" name="t7"></td></tr>
+            <tr><td><label for="option price">Option Price:</label></td><td><input id="8"  type="text" name="t8"></td></tr>
     </tbody>
   </table>
   
    <table id="table2">
     <tbody>
     		<td bgcolor="#FFFFFF" style="line-height:10px;" colspan=3>&nbsp;</td>
-            <tr><td><label for="spot min">Spot min:</label></td><td><input id="spotMin"  type="text" name="t10"></td></tr>
-            <tr><td><label for="spot max">Spot max:</label></td><td><input id="spotMax"  type="text" name="t11"></td></tr>
+            <tr><td><label for="spot min">Spot min:</label></td><td><input id="spotMin"  type="text" name="t9"></td></tr>
+            <tr><td><label for="spot max">Spot max:</label></td><td><input id="spotMax"  type="text" name="t10"></td></tr>
     </tbody>
   </table>
   
@@ -80,13 +79,14 @@
 	  var j = 0;
 	  var k = 0;
 	  var m = 0;
-	  var rowCount = 12;
-	  var k = rowCount + 1;
+	  var rowCount = 11;
 	  var saved = '';
 	  var lastActiveToolIdFull = evt.target.id;
 	  var lastActiveToolIdShort = lastActiveToolIdFull.substring(lastActiveToolIdFull.length - 1);
+	  
 
 	  if (evt.target.value === "Duplicate Leg") {
+		  
 		    
 		  //increase leg count by 1
 			var new_chq_no = parseInt($('#total_chq').val())+1;
@@ -108,7 +108,7 @@
 					direction = $("#direction1").clone().attr("id","direction" + last_chq_no);
 					direction.attr("id", "direction" + new_chq_no);
 					
-					var directionTest = document.getElementById('direction1');			
+					var directionTest = document.getElementById('direction' + lastActiveToolIdShort);			
 					directionSelected = directionTest.selectedIndex;
 					direction[0].value = directionSelected;
 
@@ -123,7 +123,7 @@
 					callPut = $("#CallPut1").clone().attr("id","CallPut" + last_chq_no);
 					callPut.attr("id", "CallPut" + new_chq_no);
 					
-					var callPutTest = document.getElementById('CallPut1');				
+					var callPutTest = document.getElementById('CallPut' + lastActiveToolIdShort);				
 					callPutSelected = callPutTest.selectedIndex;
 					callPut[0].value = callPutSelected;
 								
@@ -136,7 +136,7 @@
 					expiry = $("#Expiry1").clone().attr("id","Expiry" + last_chq_no);
 					expiry.attr("id", "Expiry" + new_chq_no);
 					
-					var expiryTest = document.getElementById('Expiry1');				
+					var expiryTest = document.getElementById('Expiry' + lastActiveToolIdShort);				
 					expirySelected = expiryTest.selectedIndex;
 					expiry[0].value = expirySelected;
 								
@@ -146,28 +146,15 @@
 				}
 				// add textboxes from row 4 until last row in table
 				else {
-					//if it's the second column take values from the first column
-					if (new_chq_no == 2) {
-						j++;
-		  				const input = document.createElement("input")
-		  				input.setAttribute("id", j + rowCount, "class", "secure");
-		  				input.value = document.getElementById(j).value;
-		    			const cell = document.createElement(i ? "td" : "th")
-		    			cell.appendChild(input)   
-		    			row.appendChild(cell)
-					}
-   					// if it's any other column take the previous columns values
-					else {
 		  				k++;
-		  				m++;
 		  				const input = document.createElement("input")
-		  				input.setAttribute("id", (rowCount * (new_chq_no - 2)) + (k - 1), "class", "secure");
-		  				input.value = document.getElementById(rowCount * (lastActiveToolIdShort - 1) + m).value;
+		  				input.setAttribute("id", (8 * (new_chq_no - 1) + k) , "class", "secure");
+		  				input.value = document.getElementById(1).value;
 		    			const cell = document.createElement(i ? "td" : "th")
 		    			cell.appendChild(input)   
 		    			row.appendChild(cell)
 
-					}
+					
 				}
     			
   		}
@@ -176,17 +163,62 @@
 
 		else if (evt.target.value === "Remove Leg") {
 			var last_chq_no = $('#total_chq').val();
+			
 			//only remove leg if the number of legs > 1
 			if(last_chq_no > 1){
+				
+				
 			  var allRows = document.getElementById('table1').rows;
 			  for (var i=0; i< allRows.length; i++) {
-			    allRows[i].deleteCell(-1); 
+			    allRows[i].deleteCell(lastActiveToolIdShort); 
 			  }
+			  
 			  //decrease leg count by 1
 				var new_chq_no = parseInt($('#total_chq').val())-1;
 			    var new_input="<input type='text' id='new_"+new_chq_no+"'>";
 			    $('#new_chq').append(new_input);
-			    $('#total_chq').val(new_chq_no)
+			    $('#total_chq').val(new_chq_no);
+			  
+			  //Adjust all element id's
+			    var totalElements = new_chq_no * 8;
+			    var dropdownIdNumber = 1;
+				for (i = 1; i < new_chq_no + 2; i++) {
+					dropdownIdNumber++;
+
+					if (lastActiveToolIdShort == i) {
+						i++;
+					}
+					
+					for(j = 0; j < 9; j++) {
+						
+				    	if (j == 0) {
+				    		
+				    		var columnID = 'column' + i;
+				    		var directionID = 'direction' + i;
+				    		var CallPutID = 'CallPut' + i;
+				    		var ExpiryID = 'Expiry' + i;	
+				    		
+				    		document.getElementById(columnID).id = 'column' + (dropdownIdNumber - 1);
+				    		document.getElementById(directionID).id = 'direction' + (dropdownIdNumber - 1);
+				    		document.getElementById(CallPutID).id = 'CallPut' + (dropdownIdNumber - 1);
+				    		document.getElementById(ExpiryID).id = 'Expiry' + (dropdownIdNumber - 1);
+				    	}
+				    	else {
+				    		if (i == 1) {
+				    			document.getElementById(j).id = j;
+				    		}
+				    		else {
+				    			document.getElementById(j + ((dropdownIdNumber - 1) * 8)).id = j + ((dropdownIdNumber - 2) * 8);
+				    		}
+				    			
+				    					    
+				    	}
+				    }
+					
+				}
+			    
+			    
+			    
 			  }
 
 		}
@@ -223,14 +255,35 @@
 					callPut.appendTo(cellTwo);
 					row.appendChild(cellTwo)
 				}
+				else if (i == 3) {
+					expiry = $("#Expiry1").clone().attr("id","Expiry" + last_chq_no);
+					expiry.attr("id", "Expiry" + new_chq_no);								
+					const cellThree = document.createElement(i ? "td" : "th")
+					expiry.appendTo(cellThree);
+					row.appendChild(cellThree)
+				}
 				// add textboxes from row 2 until last row in table
 				else {
-	  				k++;
-	  				const input = document.createElement("input")
-	  				input.setAttribute("id", (rowCount * (new_chq_no - 2)) + (k - 1), "class", "secure");
-	    			const cell = document.createElement(i ? "td" : "th")
-	    			cell.appendChild(input)   
-	    			row.appendChild(cell)
+					//if it's the second column take values from the first column
+					if (new_chq_no == 2) {
+						j++;
+		  				const input = document.createElement("input")
+		  				input.setAttribute("id", j + (rowCount - 3), "class", "secure");
+		    			const cell = document.createElement(i ? "td" : "th")
+		    			cell.appendChild(input)   
+		    			row.appendChild(cell)
+					}
+   					// if it's any other column take the previous columns values
+					else {
+		  				k++;
+		  				m++;
+		  				const input = document.createElement("input")
+		  				input.setAttribute("id", (8 * (new_chq_no - 1)) + (i - 3), "class", "secure");
+		    			const cell = document.createElement(i ? "td" : "th")
+		    			cell.appendChild(input)   
+		    			row.appendChild(cell)
+
+					}
 				}
     			
   		}
@@ -245,15 +298,12 @@
 	i = 400;
 	j = 500;
 	k = j - i;
-	
 	//last_chq_no is the current number of inputboxes
 	
-  window.onload = function () {
+  window.onload = function () {	
 	
-	  var spotMin = document.getElementById("spotMin").value;
-		var sportMinFloat = parseFloat(spotMin);	
-		
-    var chart = new CanvasJS.Chart("chartContainer",
+	//Create an empty chart when loading the webpage	
+    var dummyChart = new CanvasJS.Chart("chartContainer",
     {
 
       title:{
@@ -276,52 +326,95 @@
 				]
 			},
       
-		data: [
-	   {
-		type: "line",
-
-		dataPoints: [
-		{ x: 1.05, y: 150 },
-		{ x: 1.06, y: 200 },
-		{ x: 1.07, y: 500}
-	    ]
-	   }
-	   ]
+			 data: [
+			      {
+			        type: "line",
+			        dataPoints: [
+			        		//{x: 1, y:20}
+			        ]
+			      }
+			      ]
     });
 
-    chart.render();
+    dummyChart.render();
+	}
     
-	$("#updateDataPoint").click(function () {
+	$("#updateDataPoint").click(function () {	
+		
+		var chart = new CanvasJS.Chart("chartContainer",
+			    {
+
+			      title:{
+			      text: "PnL at Expiry"
+			      },
+			      axisX:{
+			    	  title: "Axis X with maximum 610",
+			    	  minimum: 1.10,
+			          maximum: 1.18,
+					},
+					axisY:{
+				    	  title: "Axis X with maximum 610",
+				    	  minimum: -10000,
+				          maximum: 10000,
+							stripLines:[
+							{                
+								color:"#23EA23",
+								value:0
+							}
+							]
+						},
+			      
+						 data: [
+						      {
+						        type: "line",
+						        dataPoints: [
+						            { x: 1.11, y: 5000 },
+						            { x: 1.12, y: 55},
+						            { x: 1.14, y: 95 }
+						        ]
+						      }
+						      ]
+			    });
+
+			    chart.render();
+		
 		
 		var new_chq_no = parseInt($('#total_chq').val());
 	    var new_input="<input type='text' id='new_"+new_chq_no+"'>";
 	    $('#new_chq').append(new_input);
 	    $('#total_chq').val(new_chq_no);
 	    var last_chq_no = $('#total_chq').val();
+    
+	    for (let i = 0; i < 1; i++) {
+	    
+	    var not = 4 + (i * 11);
+	    var strike = 6 + (i * 11);
+	    var price = 8 + (i * 11);
 
 		
 	    var firstPointX = document.getElementById("spotMin").value;
 		var firstPointValueX = parseFloat(firstPointX);
 		
-		var Notional = document.getElementById("5").value;
+		var Notional = document.getElementById(not).value;
 		var NotionalFloat = parseFloat(Notional);
 		
-		var secondPointX = document.getElementById("7").value;
+		var secondPointX = document.getElementById(strike).value;
 		var secondPointValueX = parseFloat(secondPointX);
 			
 		var lastPointX = document.getElementById("spotMax").value;
 		var lastPointValueX = parseFloat(lastPointX);
 				
-		var optionValue = document.getElementById("9").value;
+		var optionValue = document.getElementById(price).value;
 		var optionValueFloat = parseFloat(optionValue) * -1;
 		
 		var firstPointY = Math.max(firstPointValueX - secondPointValueX, 0) + optionValueFloat;
 		var secondPointY = Math.max(secondPointValueX - secondPointValueX, 0) + optionValueFloat;
 		var lastPointY = (lastPointValueX * (NotionalFloat)/secondPointValueX) - NotionalFloat  + optionValueFloat;
 		
-		var directionTest = document.getElementById('direction1');				
+		var directionTest = document.getElementById('direction' + (i + 1));				
 		directionSelected = directionTest.selectedIndex;
-		var callPutTest = document.getElementById('CallPut1');				
+		
+		var callPutTest = document.getElementById('CallPut' + (i + 1));				
 		callPutSelected = callPutTest.selectedIndex;
 			
 		var length = chart.options.data[0].dataPoints.length;
@@ -363,34 +456,101 @@
 				chart.options.data[0].dataPoints[1].y = -secondPointY;
 				chart.options.data[0].dataPoints[length-1].y = -firstPointY;
 			}
-		}
-		
-		
+		}	
 		chart.render();
+		
+		
+
 		
 		var newSeries = {
 		        type: "line",
 		        dataPoints: [
-		            { x: 1.0, y: 5000 },
-		            { x: 1.11, y: 55},
+		            { x: 1.11, y: 5000 },
+		            { x: 1.12, y: 55},
 		            { x: 1.14, y: 95 }
 		        ]
 		    };
-		    //chart.options.data.push(newSeries);
-		    //chart.options.data[0].dataPoints.push({ x: 1.2, y: 5000});
-
+		   
 		    for (let i = 1; i < new_chq_no; i++) {
+		    	
+		    	var not = 4 + (i * 11);
+			    var strike = 6 + (i * 11);
+			    var price = 8 + (i * 11);
+
+				
+			    var firstPointX = document.getElementById("spotMin").value;
+				var firstPointValueX = parseFloat(firstPointX);
+				
+				var Notional = document.getElementById(not).value;
+				var NotionalFloat = parseFloat(Notional);
+				
+				var secondPointX = document.getElementById(strike).value;
+				var secondPointValueX = parseFloat(secondPointX);
+					
+				var lastPointX = document.getElementById("spotMax").value;
+				var lastPointValueX = parseFloat(lastPointX);
+						
+				var optionValue = document.getElementById(price).value;
+				var optionValueFloat = parseFloat(optionValue) * -1;
+				
+				var firstPointY = Math.max(firstPointValueX - secondPointValueX, 0) + optionValueFloat;
+				var secondPointY = Math.max(secondPointValueX - secondPointValueX, 0) + optionValueFloat;
+				var lastPointY = (lastPointValueX * (NotionalFloat)/secondPointValueX) - NotionalFloat  + optionValueFloat;
+				
+				var directionTest = document.getElementById('direction' + (i + 1));				
+				directionSelected = directionTest.selectedIndex;
+				
+				var callPutTest = document.getElementById('CallPut' + (i + 1));				
+				callPutSelected = callPutTest.selectedIndex;
+					
+				var length = chart.options.data[0].dataPoints.length;
+				
+		    	
 		    	chart.options.data.push(newSeries);
-		    	chart.options.data[i].dataPoints[0].y = 7000;
-		    	chart.options.data[i].dataPoints[1].y = 7000;
-		    	chart.options.data[i].dataPoints[2].y = -2000;
+		    	
+		    	chart.options.data[i].dataPoints[0].x = firstPointValueX;
+				chart.options.data[i].dataPoints[1].x = secondPointValueX;
+				chart.options.data[i].dataPoints[length-1].x = lastPointValueX;
+		    	//Call Option pricing
+				if (callPutSelected == 0) {
+					
+					//Buy CAll
+					if (directionSelected == 0) {
+
+						chart.options.data[i].dataPoints[0].y = firstPointY;
+						chart.options.data[i].dataPoints[1].y = secondPointY;
+						chart.options.data[i].dataPoints[length-1].y = lastPointY;
+					}
+					//Sell CAll
+					else {
+						chart.options.data[i].dataPoints[0].y = -firstPointY;
+						chart.options.data[i].dataPoints[1].y = -secondPointY;
+						chart.options.data[i].dataPoints[length-1].y = -lastPointY;
+					}
+				}
+				//Put Option pricing
+				else {
+					
+					//Buy Put
+					if (directionSelected == 0) {
+						chart.options.data[i].dataPoints[0].y = lastPointY ;
+						chart.options.data[i].dataPoints[1].y = secondPointY;
+						chart.options.data[i].dataPoints[length-1].y = firstPointY;
+					}
+					//Sell Put
+					else {
+						chart.options.data[i].dataPoints[0].y = -lastPointY;
+						chart.options.data[i].dataPoints[1].y = -secondPointY;
+						chart.options.data[i].dataPoints[length-1].y = -firstPointY;
+					}
+				}	
+				
 		    	chart.render();
 		    }
-		    //chart.options.data[1].dataPoints[1].y = 9000;
-		    //chart.render();
+		}
 
-		}); 
-  }
+		});
+  
   </script>
  <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script></head>
 <body>
