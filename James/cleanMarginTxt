@@ -127,9 +127,98 @@ public class hangingMan {
         		i++;
             }
         }
-        System.out.println(finalArray);
 
+        
+        
+        
+        
+        //Create Array with the product_id's and product info
+        
+        ArrayList<String> arrayCME =new ArrayList<String>();
+		File cme = new File("C:/Users/jhwil/OneDrive/Documents/TT/Queue Questions/TT_Product_Ids.txt");
+		Scanner scanCME = new Scanner(cme);
+		while (scanCME.hasNext()) {
+			arrayCME.add(scanCME.nextLine());
+		}
 
+		//remove column headers
+		arrayCME.remove(0);
+		
+		int idSize = 0;
+		int productSize = 0;
+		int spaceBetweenIdProduct = 6;
+		int typeStart;
+		int symbolStart;
+		ArrayList<Character> sublist = new ArrayList<Character>();
+		List<String> finalCMEArray = new ArrayList<>();
+
+		
+		for (int i = 0; i < arrayCME.size(); i++) {
+			
+			for (int j = 0; j < 50; j++) {
+				//System.out.print(arrayCME.get(i).charAt(j));
+				sublist.add(arrayCME.get(i).charAt(j)); 
+						
+				if (arrayCME.get(i).charAt(j + 1) == ',') {
+					StringBuilder sb = new StringBuilder();
+		            
+		            for(Character ca: sublist) {
+		            	sb.append(ca);
+		            }
+		            String tempString = sb.toString();
+		            finalCMEArray.add(tempString); 
+					sublist.clear();
+					
+					idSize = j;
+					break;	
+				}
+			}
+			
+			
+			//System.out.print(" ");
+			
+				typeStart = idSize + spaceBetweenIdProduct;
+				for (int k = typeStart; k < 500; k++) {
+					//System.out.print(arrayCME.get(i).charAt(k));
+					sublist.add(arrayCME.get(i).charAt(k)); 
+					if (arrayCME.get(i).charAt(k  +1) == ',') {
+						StringBuilder sb = new StringBuilder();
+			            
+			            for(Character ca: sublist) {
+			            	sb.append(ca);
+			            }
+			            String tempString = sb.toString();
+			            finalCMEArray.add(tempString); 
+						sublist.clear();
+						
+						productSize = k;
+						break;	
+					}
+				}
+				
+				//System.out.print(" ");
+				
+				symbolStart = productSize + 2;
+				for (int l = symbolStart; l < 500; l++) {
+					//System.out.print(arrayCME.get(i).charAt(l));
+					sublist.add(arrayCME.get(i).charAt(l)); 
+					if (arrayCME.get(i).charAt(l  +1) == ',') {
+						StringBuilder sb = new StringBuilder();
+			            
+			            for(Character ca: sublist) {
+			            	sb.append(ca);
+			            }
+			            String tempString = sb.toString();
+			            finalCMEArray.add(tempString); 
+						sublist.clear();
+						
+						break;	
+					}
+				}
+			//System.out.println("");
+			}
+
+		//Write excel File
 		System.out.println("Write data to an Excel Sheet");
 		FileOutputStream fos=new FileOutputStream("C:/Users/jhwil/OneDrive/Documents/TT/1.csv");
 		HSSFWorkbook workBook = new HSSFWorkbook();
@@ -141,27 +230,52 @@ public class hangingMan {
 		int rowNumber = 3;
 		int colNumber = 3;
 		
-		for(int i=0;i< finalArray.size() ;i++) {		
-
-			row = spreadSheet.createRow(rowNumber);
+		//Write column headers
+		row = spreadSheet.createRow(rowNumber - 1);
+		
+		cell = row.createCell(colNumber);
+		cell.setCellValue("Margin");
+		
+		cell = row.createCell(colNumber + 1);
+		cell.setCellValue("Product_id");
+		
+		cell = row.createCell(colNumber + 2);
+		cell.setCellValue("Product");
+		
+		cell = row.createCell(colNumber + 3);
+		cell.setCellValue("Symbol");
+		
+		//Populate spreadsheet
+		for(int i=0;i< finalArray.size() ;i++) {
 			
-			//output margin or product_id
-			cell = row.createCell(colNumber);
-			cell.setCellValue(finalArray.get(i).toString());
-			
-			//output values for margin or product_id
-			cell = row.createCell(colNumber + 1);
-			if (finalArray.get(i).equals("margin")) {
-				cell.setCellValue(Double.parseDouble(finalArray.get(i + 1)));
+			if ( i > finalArray.size() - 3) {
+				break;
 			}
 			else {
-			cell.setCellValue(finalArray.get(i + 1).toString());
+				row = spreadSheet.createRow(rowNumber);
+				
+				cell = row.createCell(colNumber);
+				cell.setCellValue(Double.parseDouble(finalArray.get(i + 1)));
+				
+				cell = row.createCell(colNumber + 1);
+				cell.setCellValue(finalArray.get(i + 3).toString());
+				
+				int CMEIndex = finalCMEArray.indexOf(finalArray.get(i + 3));
+				
+				cell = row.createCell(colNumber + 2);
+				cell.setCellValue(finalCMEArray.get(CMEIndex + 1).toString());
+				
+				cell = row.createCell(colNumber + 3);
+				cell.setCellValue(finalCMEArray.get(CMEIndex + 2).toString());
+				
+				rowNumber++;
+				i += 3;
 			}
 			
-			rowNumber++;
-			i++;
-	}
-		 
+			
+			
+		}
+		
 		System.out.println("Done");
 		workBook.write(fos);
 		arr.clear();
