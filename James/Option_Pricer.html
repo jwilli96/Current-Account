@@ -149,7 +149,7 @@
 		  				k++;
 		  				const input = document.createElement("input")
 		  				input.setAttribute("id", (8 * (new_chq_no - 1) + k) , "class", "secure");
-		  				input.value = document.getElementById(1).value;
+		  				input.value = document.getElementById((lastActiveToolIdShort * 8 + k) - 8).value;
 		    			const cell = document.createElement(i ? "td" : "th")
 		    			cell.appendChild(input)   
 		    			row.appendChild(cell)
@@ -184,7 +184,6 @@
 			  	var dropdownNumber = lastActiveToolIdShort;
 				for (i = lastActiveToolIdShort; i < new_chq_no + 1; i++) {
 					dropdownNumber++;
-					alert("Loop " + i);
 					for(j = 0; j < 9; j++) {
 						
 				    	if (j == 0) {
@@ -451,7 +450,7 @@
 		
 		
 
-		
+		for (let j = 1; j < new_chq_no; j++) {
 		var newSeries = {
 		        type: "line",
 		        dataPoints: [
@@ -461,11 +460,11 @@
 		        ]
 		    };
 		   
-		    for (let i = 1; i < new_chq_no; i++) {
+		    
 		    	
-		    	var not = 4 + (i * 11);
-			    var strike = 6 + (i * 11);
-			    var price = 8 + (i * 11);
+		    	var not = 4 + (j * 8);
+			    var strike = 6 + (j * 8);
+			    var price = 8 + (j * 8);
 
 				
 			    var firstPointX = document.getElementById("spotMin").value;
@@ -487,10 +486,10 @@
 				var secondPointY = Math.max(secondPointValueX - secondPointValueX, 0) + optionValueFloat;
 				var lastPointY = (lastPointValueX * (NotionalFloat)/secondPointValueX) - NotionalFloat  + optionValueFloat;
 				
-				var directionTest = document.getElementById('direction' + (i + 1));				
+				var directionTest = document.getElementById('direction' + (j + 1));				
 				directionSelected = directionTest.selectedIndex;
 				
-				var callPutTest = document.getElementById('CallPut' + (i + 1));				
+				var callPutTest = document.getElementById('CallPut' + (j + 1));				
 				callPutSelected = callPutTest.selectedIndex;
 					
 				var length = chart.options.data[0].dataPoints.length;
@@ -498,24 +497,24 @@
 		    	
 		    	chart.options.data.push(newSeries);
 		    	
-		    	chart.options.data[i].dataPoints[0].x = firstPointValueX;
-				chart.options.data[i].dataPoints[1].x = secondPointValueX;
-				chart.options.data[i].dataPoints[length-1].x = lastPointValueX;
+		    	chart.options.data[j].dataPoints[0].x = firstPointValueX;
+				chart.options.data[j].dataPoints[1].x = secondPointValueX;
+				chart.options.data[j].dataPoints[length-1].x = lastPointValueX;
 		    	//Call Option pricing
 				if (callPutSelected == 0) {
 					
 					//Buy CAll
 					if (directionSelected == 0) {
 
-						chart.options.data[i].dataPoints[0].y = firstPointY;
-						chart.options.data[i].dataPoints[1].y = secondPointY;
-						chart.options.data[i].dataPoints[length-1].y = lastPointY;
+						chart.options.data[j].dataPoints[0].y = firstPointY;
+						chart.options.data[j].dataPoints[1].y = secondPointY;
+						chart.options.data[j].dataPoints[length-1].y = lastPointY;
 					}
 					//Sell CAll
 					else {
-						chart.options.data[i].dataPoints[0].y = -firstPointY;
-						chart.options.data[i].dataPoints[1].y = -secondPointY;
-						chart.options.data[i].dataPoints[length-1].y = -lastPointY;
+						chart.options.data[j].dataPoints[0].y = -firstPointY;
+						chart.options.data[j].dataPoints[1].y = -secondPointY;
+						chart.options.data[j].dataPoints[length-1].y = -lastPointY;
 					}
 				}
 				//Put Option pricing
@@ -523,15 +522,15 @@
 					
 					//Buy Put
 					if (directionSelected == 0) {
-						chart.options.data[i].dataPoints[0].y = lastPointY ;
-						chart.options.data[i].dataPoints[1].y = secondPointY;
-						chart.options.data[i].dataPoints[length-1].y = firstPointY;
+						chart.options.data[j].dataPoints[0].y = lastPointY ;
+						chart.options.data[j].dataPoints[1].y = secondPointY;
+						chart.options.data[j].dataPoints[length-1].y = firstPointY;
 					}
 					//Sell Put
 					else {
-						chart.options.data[i].dataPoints[0].y = -lastPointY;
-						chart.options.data[i].dataPoints[1].y = -secondPointY;
-						chart.options.data[i].dataPoints[length-1].y = -firstPointY;
+						chart.options.data[j].dataPoints[0].y = -lastPointY;
+						chart.options.data[j].dataPoints[1].y = -secondPointY;
+						chart.options.data[j].dataPoints[length-1].y = -firstPointY;
 					}
 				}	
 				
