@@ -71,6 +71,7 @@
       <body>  
 <div id="chartContainer" style="width:100%; height:280px"></div>  
 <button id="updateDataPoint">Update Data Point</button>  
+<button id="NetPosition">Net Positions</button> 
 </body>
 
   <script language="javascript" type="text/javascript">
@@ -327,8 +328,125 @@
 
     dummyChart.render();
 	}
+  
+	
+  $("#NetPosition").click(function () {			  
+	  //Get total columns
+	  var new_chq_no = parseInt($('#total_chq').val());  
+	  //Get the first and last x values of the chart
+	  var firstPointX = document.getElementById("spotMin").value;
+	  var lastPointX = document.getElementById("spotMax").value;
+	  //Create empty array to hold all strikes
+	  const seriesStrikes = [];
+	  
+	  seriesStrikes.push(firstPointX);
+	  //Add all sttikes to array
+	  for (let i = 0; i < new_chq_no; i++) {
+		  
+	  	var strikeOne = document.getElementById(6 + (i * 8)).value;
+	  	seriesStrikes.push(strikeOne);
+	  
+	  }	  
+	  seriesStrikes.push(lastPointX);
+	  
+	  
+	  
+	  
+	  //Empty list to store y values 
+	  const XOnePnL = [];
+	  const XTwoPnL = [];
+	  const XThreePnL = [];
+	  for (let i = 0; i < new_chq_no; i++) {		  
+		  
+		  var total = 0;
+		  var not = 4 + (i * 8);
+		  var strike = 6 + (i * 8);
+		  var price = 8 + (i * 8);
+		  
+		  var directionTest = document.getElementById('direction' + (i + 1));				
+			directionSelected = directionTest.selectedIndex;
+		 
+		  var callPutTest = document.getElementById('CallPut' + (i + 1));				
+			callPutSelected = callPutTest.selectedIndex;
+			
+			var firstPointX = document.getElementById("spotMin").value;
+			var firstPointValueX = parseFloat(firstPointX);
+			
+			var secondPointX = document.getElementById(strike).value;
+			var secondPointValueX = parseFloat(secondPointX);
+			
+			var lastPointX = document.getElementById("spotMax").value;
+			var lastPointValueX = parseFloat(lastPointX);
+			
+			var Notional = document.getElementById(not).value;
+			var NotionalFloat = parseFloat(Notional);
+			
+			var optionValue = document.getElementById(price).value;
+			var optionValueFloat = parseFloat(optionValue) * -1;
+			
+			var firstPointY = Math.max(firstPointValueX - secondPointValueX, 0) + optionValueFloat;
+			var secondPointY = Math.max(secondPointValueX - secondPointValueX, 0) + optionValueFloat;
+			var lastPointY = (lastPointValueX * (NotionalFloat)/secondPointValueX) - NotionalFloat  + optionValueFloat;
+			
+			
+			//Call Option pricing
+			if (callPutSelected == 0) {
+				
+				//Buy CAll
+				if (directionSelected == 0) {	
+					XOnePnL.push(firstPointY);
+					XTwoPnL.push(secondPointY);
+					XThreePnL.push(lastPointY);
+				}
+				//Sell CAll
+				else {
+					XOnePnL.push(-firstPointY);
+					XTwoPnL.push(-secondPointY);
+					XThreePnL.push(-lastPointY);
+				}
+			}
+			//Put Option pricing
+			else {
+				
+				//Buy Put
+				if (directionSelected == 0) {	
+					XOnePnL.push(lastPointY);
+					XTwoPnL.push(secondPointY);
+					XThreePnL.push(firstPointY);
+				}
+				//Sell Put
+				else {
+					XOnePnL.push(-lastPointY);
+					XTwoPnL.push(-secondPointY);
+					XThreePnL.push(-firstPointY);
+				}
+			}	
+
+			
+		}
+	  
+	  var sumX1 = 0;
+	  var sumX2 = 0;
+	  var sumX3 = 0
+	  for (let i = 0; i < XOnePnL.length; i++) {
+		  sumX1 += XOnePnL[i];	
+		  sumX2 += XTwoPnL[i];
+		  sumX3 += XThreePnL[i];
+	    }
+	  alert(sumX1);
+	  alert(sumX2);
+	  alert(sumX3);
+	  
+	  
+	  
+	  
+	  
+		
+  	});
+	
     
 	$("#updateDataPoint").click(function () {	
+		
 		
 		var chart = new CanvasJS.Chart("chartContainer",
 			    {
@@ -537,6 +655,7 @@
 		    	chart.render();
 		    }
 		}
+	    
 
 		});
   
