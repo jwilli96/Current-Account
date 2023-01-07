@@ -384,8 +384,8 @@
 			var optionValue = document.getElementById(price).value;
 			var optionValueFloat = parseFloat(optionValue) * -1;
 			
-			var firstPointY = Math.max(firstPointValueX - secondPointValueX, 0) + optionValueFloat;
-			var secondPointY = Math.max(secondPointValueX - secondPointValueX, 0) + optionValueFloat;
+			var firstPointY = Math.max(firstPointValueX - seriesStrikes[i], 0) + optionValueFloat;
+			var secondPointY = Math.max(secondPointValueX - seriesStrikes[i], 0) + optionValueFloat;
 			var lastPointY = (lastPointValueX * (NotionalFloat)/secondPointValueX) - NotionalFloat  + optionValueFloat;
 			
 			
@@ -393,16 +393,25 @@
 			if (callPutSelected == 0) {
 				
 				//Buy CAll
-				if (directionSelected == 0) {	
-					XOnePnL.push(firstPointY);
-					XTwoPnL.push(secondPointY);
-					XThreePnL.push(lastPointY);
+				if (directionSelected == 0) {
+					//is the strike price above spot at maturity?
+					if (secondPointValueX > seriesStrikes[0]) {
+						XOnePnL.push(optionValueFloat);
+					}
+					else {
+						XOnePnL.push((lastPointValueX * (NotionalFloat)/secondPointValueX) - NotionalFloat  + optionValueFloat);
+					}
 				}
 				//Sell CAll
 				else {
-					XOnePnL.push(-firstPointY);
-					XTwoPnL.push(-secondPointY);
-					XThreePnL.push(-lastPointY);
+					//is the strike price above spot at maturity?
+					if (secondPointValueX > seriesStrikes[0]) {
+						XOnePnL.push(-optionValueFloat);
+					}
+					else {
+						XOnePnL.push((lastPointValueX * (NotionalFloat)/secondPointValueX) - NotionalFloat  + optionValueFloat);
+					}
+
 				}
 			}
 			//Put Option pricing
@@ -410,32 +419,33 @@
 				
 				//Buy Put
 				if (directionSelected == 0) {	
-					XOnePnL.push(lastPointY);
-					XTwoPnL.push(secondPointY);
-					XThreePnL.push(firstPointY);
+					if (secondPointValueX < seriesStrikes[0]) {
+						XOnePnL.push(optionValueFloat);
+					}
+					else {
+						XOnePnL.push((lastPointValueX * (NotionalFloat)/secondPointValueX) - NotionalFloat  + optionValueFloat);
+					}
 				}
 				//Sell Put
 				else {
-					XOnePnL.push(-lastPointY);
-					XTwoPnL.push(-secondPointY);
-					XThreePnL.push(-firstPointY);
+					if (secondPointValueX < seriesStrikes[0]) {
+						XOnePnL.push(-optionValueFloat);
+					}
+					else {
+						XOnePnL.push(-1*((lastPointValueX * (NotionalFloat)/secondPointValueX) - NotionalFloat  + optionValueFloat));
+					}
 				}
 			}	
-
-			
+	alert(XOnePnL[i]);
 		}
 	  
 	  var sumX1 = 0;
-	  var sumX2 = 0;
-	  var sumX3 = 0
 	  for (let i = 0; i < XOnePnL.length; i++) {
 		  sumX1 += XOnePnL[i];	
-		  sumX2 += XTwoPnL[i];
-		  sumX3 += XThreePnL[i];
+
 	    }
 	  alert(sumX1);
-	  alert(sumX2);
-	  alert(sumX3);
+
 	  
 	  
 	  
