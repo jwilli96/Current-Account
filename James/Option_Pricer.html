@@ -306,8 +306,8 @@
 		},
 		axisY:{
 	    	  title: "Axis X with maximum 610",
-	    	  minimum: -10000,
-	          maximum: 10000,
+	    	  minimum: -15000,
+	          maximum: 15000,
 				stripLines:[
 				{                
 					color:"#23EA23",
@@ -349,13 +349,21 @@
 	  }	  
 	  seriesStrikes.push(lastPointX);
 	  
-	  
+	  //sort array from smallest to largest
+	  seriesStrikes.sort(function(a, b) {
+		  return a - b;
+		});
+	  let uniqueSeriesStrikes = [...new Set(seriesStrikes)];
+		
 	  
 	  
 	  //Empty list to store y values 
-	  const XOnePnL = [];
-	  const XTwoPnL = [];
-	  const XThreePnL = [];
+	  
+	  const allPnL = [];
+	  
+	  for (let j = 0; j < uniqueSeriesStrikes.length; j++) {
+		  const PnLPerStrike = [];
+		  //alert("Strike being worked " + uniqueSeriesStrikes[j]);
 	  for (let i = 0; i < new_chq_no; i++) {		  
 		  
 		  var total = 0;
@@ -384,8 +392,8 @@
 			var optionValue = document.getElementById(price).value;
 			var optionValueFloat = parseFloat(optionValue) * -1;
 			
-			var firstPointY = Math.max(firstPointValueX - seriesStrikes[i], 0) + optionValueFloat;
-			var secondPointY = Math.max(secondPointValueX - seriesStrikes[i], 0) + optionValueFloat;
+			var firstPointY = Math.max(firstPointValueX - uniqueSeriesStrikes[i], 0) + optionValueFloat;
+			var secondPointY = Math.max(secondPointValueX - uniqueSeriesStrikes[i], 0) + optionValueFloat;
 			var lastPointY = (lastPointValueX * (NotionalFloat)/secondPointValueX) - NotionalFloat  + optionValueFloat;
 			
 			
@@ -395,21 +403,21 @@
 				//Buy CAll
 				if (directionSelected == 0) {
 					//is the strike price above spot at maturity?
-					if (secondPointValueX > seriesStrikes[0]) {
-						XOnePnL.push(optionValueFloat);
+					if (secondPointValueX >= uniqueSeriesStrikes[j]) {
+						PnLPerStrike.push(optionValueFloat);
 					}
 					else {
-						XOnePnL.push((lastPointValueX * (NotionalFloat)/secondPointValueX) - NotionalFloat  + optionValueFloat);
+						PnLPerStrike.push((uniqueSeriesStrikes[j] * (NotionalFloat)/secondPointValueX) - NotionalFloat  + optionValueFloat);
 					}
 				}
 				//Sell CAll
 				else {
 					//is the strike price above spot at maturity?
-					if (secondPointValueX > seriesStrikes[0]) {
-						XOnePnL.push(-optionValueFloat);
+					if (secondPointValueX >= uniqueSeriesStrikes[j]) {
+						PnLPerStrike.push(-optionValueFloat);
 					}
 					else {
-						XOnePnL.push((lastPointValueX * (NotionalFloat)/secondPointValueX) - NotionalFloat  + optionValueFloat);
+						PnLPerStrike.push(-1*((uniqueSeriesStrikes[j] * (NotionalFloat)/secondPointValueX) - NotionalFloat  + optionValueFloat));
 					}
 
 				}
@@ -419,33 +427,86 @@
 				
 				//Buy Put
 				if (directionSelected == 0) {	
-					if (secondPointValueX < seriesStrikes[0]) {
-						XOnePnL.push(optionValueFloat);
+					if (secondPointValueX <= uniqueSeriesStrikes[j]) {
+						PnLPerStrike.push(optionValueFloat);
 					}
 					else {
-						XOnePnL.push((lastPointValueX * (NotionalFloat)/secondPointValueX) - NotionalFloat  + optionValueFloat);
+						
+						PnLPerStrike.push((uniqueSeriesStrikes[uniqueSeriesStrikes.length - 1] * (NotionalFloat)/secondPointValueX) - NotionalFloat  + optionValueFloat);
 					}
 				}
 				//Sell Put
 				else {
-					if (secondPointValueX < seriesStrikes[0]) {
-						XOnePnL.push(-optionValueFloat);
+					if (secondPointValueX <= uniqueSeriesStrikes[j]) {
+						PnLPerStrike.push(-optionValueFloat);
 					}
 					else {
-						XOnePnL.push(-1*((lastPointValueX * (NotionalFloat)/secondPointValueX) - NotionalFloat  + optionValueFloat));
+						PnLPerStrike.push(-1*((uniqueSeriesStrikes[uniqueSeriesStrikes.length - 1] * (NotionalFloat)/secondPointValueX) - NotionalFloat  + optionValueFloat));
 					}
 				}
 			}	
-	alert(XOnePnL[i]);
 		}
 	  
 	  var sumX1 = 0;
-	  for (let i = 0; i < XOnePnL.length; i++) {
-		  sumX1 += XOnePnL[i];	
+	  for (let i = 0; i < PnLPerStrike.length; i++) {
+		  sumX1 += PnLPerStrike[i];	
+			//alert("Pnl of position " + PnLPerStrike[i]);
+	    } 
+	  
+	  //alert("PnL sum for current strike " + sumX1);
+	  
+	  allPnL.push(sumX1);
+	  //PnLPerStrike = [];
+	  
+	  //alert("Points to fill net chart " + allPnL);
+	  
+	  }
+	  alert(uniqueSeriesStrikes);
+	  alert(allPnL);
+	  
+	  var x0 = uniqueSeriesStrikes[0];
+	  var y0 = allPnL[0];
+	    
+	  var chart = new CanvasJS.Chart("chartContainer",
+			    {
 
-	    }
-	  alert(sumX1);
+			      title:{
+			      text: "PnL at Expiry"
+			      },
+			      axisX:{
+			    	  title: "Axis X with maximum 610",
+			    	  minimum: 1.10,
+			          maximum: 1.18,
+					},
+					axisY:{
+				    	  title: "Axis X with maximum 610",
+				    	  minimum: -15000,
+				          maximum: 15000,
+							stripLines:[
+							{                
+								color:"#23EA23",
+								value:0
+							}
+							]
+						},
+			      
+						 data: [
+						      {
+						        type: "line",
+						        dataPoints: [
+						            { x: x0, y: y0 }
+						        ]
+						      }
+						      ]
+			    });
 
+	  for (let i = 1; i <= uniqueSeriesStrikes.length; i++) {
+	  var length = chart.options.data[0].dataPoints.length;
+	  chart.options.data[0].dataPoints.push({ x: uniqueSeriesStrikes[i], y: allPnL[i]});
+	  }
+	  chart.render();
+	  
+	  
 	  
 	  
 	  
@@ -471,8 +532,8 @@
 					},
 					axisY:{
 				    	  title: "Axis X with maximum 610",
-				    	  minimum: -10000,
-				          maximum: 10000,
+				    	  minimum: -15000,
+				          maximum: 15000,
 							stripLines:[
 							{                
 								color:"#23EA23",
