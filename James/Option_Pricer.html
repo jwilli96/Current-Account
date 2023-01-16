@@ -10,8 +10,9 @@
 
  <table id="table1">
     <tbody>
-         <tr><td><label for="Leg-Options">Leg1:</label></td>
+         <tr><td><label for="Leg-Options">Leg:</label></td>
 			<td><select id = "column1" style="width: 110px" onchange="addColumn(event)">
+  					<option>Leg 1</option>
   					<option>Add Leg</option>
   					<option>Duplicate Leg</option>
  					<option>Remove Leg</option>
@@ -279,9 +280,9 @@
   		}
 		}
 	  var new_chq_no = parseInt($('#total_chq').val());
-	    var new_input="<input type='text' id='new_"+new_chq_no+"'>";
-	    $('#new_chq').append(new_input);
-	    $('#total_chq').val(new_chq_no)
+	  var new_input="<input type='text' id='new_"+new_chq_no+"'>";
+	   $('#new_chq').append(new_input);
+	   $('#total_chq').val(new_chq_no)
 
 		for (let i = 1; i <= new_chq_no; i++) {
 			select = document.getElementById('column' + i);
