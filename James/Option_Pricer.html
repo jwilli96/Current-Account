@@ -71,8 +71,8 @@
   
       <body>  
 <div id="chartContainer" style="width:100%; height:280px"></div>  
-<button id="updateDataPoint">Update Data Point</button>  
-<button id="NetPosition">Net Positions</button> 
+<button id="updateDataPoint">Gross Position</button>  
+<button id="NetPosition">Net Position</button> 
 </body>
 
   <script language="javascript" type="text/javascript">
@@ -82,6 +82,7 @@
 	  var k = 0;
 	  var m = 0;
 	  var rowCount = 11;
+	  var rowBoxes = 8;
 	  var saved = '';
 	  var lastActiveToolIdFull = evt.target.id;
 	  var lastActiveToolIdShort = lastActiveToolIdFull.substring(lastActiveToolIdFull.length - 1);
@@ -150,8 +151,8 @@
 				else {
 		  				k++;
 		  				const input = document.createElement("input")
-		  				input.setAttribute("id", (8 * (new_chq_no - 1) + k) , "class", "secure");
-		  				input.value = document.getElementById((lastActiveToolIdShort * 8 + k) - 8).value;
+		  				input.setAttribute("id", (rowBoxes * (new_chq_no - 1) + k) , "class", "secure");
+		  				input.value = document.getElementById((lastActiveToolIdShort * rowBoxes + k) - rowBoxes).value;
 		    			const cell = document.createElement(i ? "td" : "th")
 		    			cell.appendChild(input)   
 		    			row.appendChild(cell)
@@ -182,7 +183,7 @@
 			    $('#total_chq').val(new_chq_no);
 			  
 			  //Adjust all element id's
-			    var totalElements = new_chq_no * 8;
+			    var totalElements = new_chq_no * rowBoxes;
 			  	var dropdownNumber = lastActiveToolIdShort;
 				for (i = lastActiveToolIdShort; i < new_chq_no + 1; i++) {
 					dropdownNumber++;
@@ -202,7 +203,7 @@
 				    		document.getElementById(ExpiryID).id = 'Expiry' + i;
 				    	}
 				    	else {
-				    		document.getElementById(j + ((i) * 8)).id = j + ((i - 1) * 8);			    					    
+				    		document.getElementById(j + ((i) * rowBoxes)).id = j + ((i - 1) * rowBoxes);			    					    
 				    	}
 				    }
 					
@@ -269,7 +270,7 @@
 		  				k++;
 		  				m++;
 		  				const input = document.createElement("input")
-		  				input.setAttribute("id", (8 * (new_chq_no - 1)) + (i - 3), "class", "secure");
+		  				input.setAttribute("id", (rowBoxes * (new_chq_no - 1)) + (i - 3), "class", "secure");
 		    			const cell = document.createElement(i ? "td" : "th")
 		    			cell.appendChild(input)   
 		    			row.appendChild(cell)
@@ -280,9 +281,6 @@
   		}
 		}
 	  var new_chq_no = parseInt($('#total_chq').val());
-	  var new_input="<input type='text' id='new_"+new_chq_no+"'>";
-	   $('#new_chq').append(new_input);
-	   $('#total_chq').val(new_chq_no)
 
 		for (let i = 1; i <= new_chq_no; i++) {
 			select = document.getElementById('column' + i);
@@ -312,12 +310,12 @@
       text: "PnL at Expiry"
       },
       axisX:{
-    	  title: "Axis X with maximum 610",
+    	  title: "Spot",
     	  minimum: 1.10,
           maximum: 1.18,
 		},
 		axisY:{
-	    	  title: "Axis X with maximum 610",
+	    	  title: "Profit & Loss",
 	    	  minimum: -15000,
 	          maximum: 15000,
 				stripLines:[
@@ -343,6 +341,8 @@
   
 	
   $("#NetPosition").click(function () {			  
+	  var rowBoxes = 8;
+	  
 	  //Get total columns
 	  var new_chq_no = parseInt($('#total_chq').val());  
 	  //Get the first and last x values of the chart
@@ -355,7 +355,7 @@
 	  //Add all sttikes to array
 	  for (let i = 0; i < new_chq_no; i++) {
 		  
-	  	var strikeOne = document.getElementById(6 + (i * 8)).value;
+	  	var strikeOne = document.getElementById(6 + (i * rowBoxes)).value;
 	  	seriesStrikes.push(strikeOne);
 	  
 	  }	  
@@ -375,13 +375,13 @@
 	  
 	  for (let j = 0; j < uniqueSeriesStrikes.length; j++) {
 		  const PnLPerStrike = [];
-		  //alert("Strike being worked " + uniqueSeriesStrikes[j]);
+	
 	  for (let i = 0; i < new_chq_no; i++) {		  
 		  
 		  var total = 0;
-		  var not = 4 + (i * 8);
-		  var strike = 6 + (i * 8);
-		  var price = 8 + (i * 8);
+		  var not = 4 + (i * rowBoxes);
+		  var strike = 6 + (i * rowBoxes);
+		  var price = 8 + (i * rowBoxes);
 		  
 		  var directionTest = document.getElementById('direction' + (i + 1));				
 			directionSelected = directionTest.selectedIndex;
@@ -462,19 +462,10 @@
 	  var sumX1 = 0;
 	  for (let i = 0; i < PnLPerStrike.length; i++) {
 		  sumX1 += PnLPerStrike[i];	
-			//alert("Pnl of position " + PnLPerStrike[i]);
 	    } 
-	  
-	  //alert("PnL sum for current strike " + sumX1);
-	  
-	  allPnL.push(sumX1);
-	  //PnLPerStrike = [];
-	  
-	  //alert("Points to fill net chart " + allPnL);
-	  
+	  	  
+	  allPnL.push(sumX1);	  
 	  }
-	  alert(uniqueSeriesStrikes);
-	  alert(allPnL);
 	  
 	  var x0 = uniqueSeriesStrikes[0];
 	  var y0 = allPnL[0];
@@ -486,14 +477,14 @@
 			      text: "PnL at Expiry"
 			      },
 			      axisX:{
-			    	  title: "Axis X with maximum 610",
-			    	  minimum: 1.10,
-			          maximum: 1.18,
+			    	  title: "Spot",
+			    	  minimum: parseFloat(firstPointX) - (0.02 * parseFloat(firstPointX)),
+			          maximum: parseFloat(lastPointX) + (0.02 * parseFloat(lastPointX)),
 					},
 					axisY:{
-				    	  title: "Axis X with maximum 610",
-				    	  minimum: -15000,
-				          maximum: 15000,
+				    	  title: "Profit & Loss",
+				    	  minimum: Math.min(-1 * (2 * ((parseFloat(lastPointX) * (NotionalFloat)/secondPointValueX) - NotionalFloat  + optionValueFloat)), 1.5 * optionValueFloat) ,
+				          maximum: Math.max(2 * ((parseFloat(lastPointX) * (NotionalFloat)/secondPointValueX) - NotionalFloat  + optionValueFloat), -1.5 * optionValueFloat),
 							stripLines:[
 							{                
 								color:"#23EA23",
@@ -517,19 +508,17 @@
 	  chart.options.data[0].dataPoints.push({ x: uniqueSeriesStrikes[i], y: allPnL[i]});
 	  }
 	  chart.render();
-	  
-	  
-	  
-	  
-	  
-	  
-	  
 		
   	});
 	
     
 	$("#updateDataPoint").click(function () {	
 		
+		var firstPointX = document.getElementById("spotMin").value;
+		var firstPointValueX = parseFloat(firstPointX) - (0.02 * parseFloat(firstPointX));
+		
+		var lastPointX = document.getElementById("spotMax").value;
+		var lastPointValueX = parseFloat(lastPointX) + (0.02 * parseFloat(lastPointX));
 		
 		var chart = new CanvasJS.Chart("chartContainer",
 			    {
@@ -538,14 +527,14 @@
 			      text: "PnL at Expiry"
 			      },
 			      axisX:{
-			    	  title: "Axis X with maximum 610",
-			    	  minimum: 1.10,
-			          maximum: 1.18,
+			    	  title: "Spot",
+			    	  minimum: firstPointValueX,
+			          maximum: lastPointValueX,
 					},
 					axisY:{
-				    	  title: "Axis X with maximum 610",
-				    	  minimum: -15000,
-				          maximum: 15000,
+				    	  title: "Profit & Loss",
+				    	  minimum: Math.min(-1 * (2 * ((parseFloat(lastPointX) * (NotionalFloat)/secondPointValueX) - NotionalFloat  + optionValueFloat)), 1.5 * optionValueFloat) ,
+				          maximum: Math.max(2 * ((parseFloat(lastPointX) * (NotionalFloat)/secondPointValueX) - NotionalFloat  + optionValueFloat), -1.5 * optionValueFloat),
 							stripLines:[
 							{                
 								color:"#23EA23",
@@ -574,12 +563,16 @@
 	    $('#new_chq').append(new_input);
 	    $('#total_chq').val(new_chq_no);
 	    var last_chq_no = $('#total_chq').val();
+	    
+	    var rowCount = 11;
+	    
+	    var rowBoxes = 8;
     
 	    for (let i = 0; i < 1; i++) {
 	    
-	    var not = 4 + (i * 11);
-	    var strike = 6 + (i * 11);
-	    var price = 8 + (i * 11);
+	    var not = 4 + (i * rowCount);
+	    var strike = 6 + (i * rowCount);
+	    var price = 8 + (i * rowCount);
 
 		
 	    var firstPointX = document.getElementById("spotMin").value;
@@ -663,9 +656,9 @@
 		   
 		    
 		    	
-		    	var not = 4 + (j * 8);
-			    var strike = 6 + (j * 8);
-			    var price = 8 + (j * 8);
+		    	var not = 4 + (j * rowBoxes);
+			    var strike = 6 + (j * rowBoxes);
+			    var price = 8 + (j * rowBoxes);
 
 				
 			    var firstPointX = document.getElementById("spotMin").value;
