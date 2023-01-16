@@ -278,6 +278,17 @@
     			
   		}
 		}
+	  var new_chq_no = parseInt($('#total_chq').val());
+	    var new_input="<input type='text' id='new_"+new_chq_no+"'>";
+	    $('#new_chq').append(new_input);
+	    $('#total_chq').val(new_chq_no)
+
+		for (let i = 1; i <= new_chq_no; i++) {
+			select = document.getElementById('column' + i);
+			var input = "Leg " + i;
+			select.options.add(new Option(input, "1"), select.options[0]);
+			document.getElementById('column' + i).options[1].remove();
+	    }
 }
 
 </script> 
