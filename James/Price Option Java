@@ -1,0 +1,82 @@
+
+
+
+import jakarta.servlet.ServletException;
+
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
+
+/**
+ * Servlet implementation class myServlet
+ */
+public class myServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		response.getWriter().append("Served at: ").append(request.getContextPath());
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	
+	public void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException {
+		int i = Integer.parseInt(req.getParameter("num1"));
+		int j = Integer.parseInt(req.getParameter("num2"));
+		double myTest = Double.parseDouble(req.getParameter("t3"));
+		
+		int p = i + j;
+		
+		
+		//double s = 1.11;
+		double s = 1.11;
+		double x = 1.17;
+		double rCCY1 = 0.01;
+		double rCCY2 = 0.02;
+		double v = 0.2473;
+		double t = 0.25;
+		
+		double d1 = (Math.log(s / x) + (rCCY2 - rCCY1 +  Math.pow(v, 2) / 2) * t) / (v * Math.sqrt(t) );
+		double d2 = d1 - v * Math.sqrt(t);
+      
+            int negD1 = (d1 < 0d) ? 1 : 0;
+            if ( negD1 == 1) 
+                d1 *= -1d;
+
+            double k = (1d / ( 1d + 0.2316419 * d1));
+            double y = (((( 1.330274429 * k - 1.821255978) * k + 1.781477937) * k - 0.356563782) * k + 0.319381530) * k;
+            y = 1.0 - 0.398942280401 * Math.exp(-0.5 * d1 * d1) * y;
+
+         
+            int negD2 = (d2 < 0d) ? 1 : 0;
+            if ( negD2 == 1) 
+                d2 *= -1d;
+
+            double l = (1d / ( 1d + 0.2316419 * d2));
+            double z = (((( 1.330274429 * l - 1.821255978) * l + 1.781477937) * l - 0.356563782) * l + 0.319381530) * l;
+            z = 1.0 - 0.398942280401 * Math.exp(-0.5 * d2 * d2) * z;
+
+          		
+        double GaussianD1 = (1d - negD1) * y + negD1 * (1d - y);
+        double GaussianD2 = (1d - negD2) * z + negD2 * (1d - z);          
+        double price = s * Math.exp(-rCCY1 * t) * GaussianD1 - x * Math.exp(-rCCY2*t) * GaussianD2;
+        double priceCash = price / s;
+        
+        PrintWriter out = res.getWriter();
+		out.println("GaussianD1: " + GaussianD1);
+		out.println("GaussianD2: " + GaussianD2);
+		out.println("price is " + price);
+		out.println("price is " + priceCash);
+		out.println("test is " + myTest);
+		
+	}
+
+}
