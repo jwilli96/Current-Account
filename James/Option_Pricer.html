@@ -1,5 +1,17 @@
 <!DOCTYPE html>
 <html>
+
+
+<body>
+
+<form action="add" method="post">
+	Enter 1st number: <input type="text" name="num1"><br>
+	Enter 2nd number: <input type="text" name="num2"><br>
+	<input type="submit">
+</form>
+</body>
+
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script type="text/javascript" src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script> 
@@ -58,6 +70,8 @@
             <tr><td><label for="strike">Stike:</label></td><td><input id="6"  type="text" name="t6"></td></tr>
             <tr><td><label for="ivol">ivol:</label></td><td><input id="7"  type="text" name="t7"></td></tr>
             <tr><td><label for="option price">Option Price:</label></td><td><input id="8"  type="text" name="t8"></td></tr>
+            <tr><td><label for="CCY1">CCY1 I/R:</label></td><td><input id="9"  type="text" name="t9"></td></tr>
+            <tr><td><label for="CCY2">CCY2 I/R:</label></td><td><input id="10"  type="text" name="t10"></td></tr>
     </tbody>
   </table>
   
@@ -81,8 +95,8 @@
 	  var j = 0;
 	  var k = 0;
 	  var m = 0;
-	  var rowCount = 11;
-	  var rowBoxes = 8;
+	  var rowCount = 13;
+	  var rowBoxes = 10;
 	  var saved = '';
 	  var lastActiveToolIdFull = evt.target.id;
 	  var lastActiveToolIdShort = lastActiveToolIdFull.substring(lastActiveToolIdFull.length - 1);
@@ -341,7 +355,7 @@
   
 	
   $("#NetPosition").click(function () {			  
-	  var rowBoxes = 8;
+	  var rowBoxes = 10;
 	  
 	  //Get total columns
 	  var new_chq_no = parseInt($('#total_chq').val());  
@@ -520,6 +534,19 @@
 		var lastPointX = document.getElementById("spotMax").value;
 		var lastPointValueX = parseFloat(lastPointX) + (0.02 * parseFloat(lastPointX));
 		
+		var not = 4;
+		var strike = 6;
+		var price = 8;
+		
+		var secondPointX = document.getElementById(strike).value;
+		var secondPointValueX = parseFloat(secondPointX);
+		
+		var optionValue = document.getElementById(price).value;
+		var optionValueFloat = parseFloat(optionValue) * -1;
+		
+		var Notional = document.getElementById(not).value;
+		var NotionalFloat = parseFloat(Notional);
+		
 		var chart = new CanvasJS.Chart("chartContainer",
 			    {
 
@@ -534,7 +561,7 @@
 					axisY:{
 				    	  title: "Profit & Loss",
 				    	  minimum: Math.min(-1 * (2 * ((parseFloat(lastPointX) * (NotionalFloat)/secondPointValueX) - NotionalFloat  + optionValueFloat)), 1.5 * optionValueFloat) ,
-				          maximum: Math.max(2 * ((parseFloat(lastPointX) * (NotionalFloat)/secondPointValueX) - NotionalFloat  + optionValueFloat), -1.5 * optionValueFloat),
+				    	  maximum: Math.max(2 * ((parseFloat(lastPointX) * (NotionalFloat)/secondPointValueX) - NotionalFloat  + optionValueFloat), -1.5 * optionValueFloat),
 							stripLines:[
 							{                
 								color:"#23EA23",
@@ -554,6 +581,7 @@
 						      }
 						      ]
 			    });
+		
 
 			    chart.render();
 		
@@ -564,15 +592,15 @@
 	    $('#total_chq').val(new_chq_no);
 	    var last_chq_no = $('#total_chq').val();
 	    
-	    var rowCount = 11;
+	    var rowCount = 13;
 	    
-	    var rowBoxes = 8;
+	    var rowBoxes = 10;
     
 	    for (let i = 0; i < 1; i++) {
 	    
-	    var not = 4 + (i * rowCount);
-	    var strike = 6 + (i * rowCount);
-	    var price = 8 + (i * rowCount);
+	    var not = 4 + (i * rowBoxes);
+	    var strike = 6 + (i * rowBoxes);
+	    var price = 8 + (i * rowBoxes);
 
 		
 	    var firstPointX = document.getElementById("spotMin").value;
@@ -640,7 +668,14 @@
 				chart.options.data[0].dataPoints[length-1].y = -firstPointY;
 			}
 		}	
-		chart.render();
+
+		var firstPointX = document.getElementById("spotMin").value;
+		var firstPointValueX = parseFloat(firstPointX) - (0.02 * parseFloat(firstPointX));
+		
+		var lastPointX = document.getElementById("spotMax").value;
+		var lastPointValueX = parseFloat(lastPointX) + (0.02 * parseFloat(lastPointX));	
+
+	    chart.render();
 		
 		
 
